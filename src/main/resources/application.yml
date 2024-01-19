@@ -1,0 +1,10 @@
+spring:
+  config:
+    import:
+      - "application_test.yml"
+      - "application_prod.yml"
+      - "application_dev.yml"
+  profiles:
+    active:
+      - "dev"
+# test
