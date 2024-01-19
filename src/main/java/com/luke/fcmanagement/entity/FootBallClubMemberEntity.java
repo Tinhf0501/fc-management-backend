@@ -27,7 +27,7 @@ public class FootBallClubMemberEntity extends BaseEntity {
     @Column(name = "NUMBER_SHIRT", nullable = false)
     private Integer numberShirt;
 
-    @Column(name = "NAME_SHIRT",nullable = false)
+    @Column(name = "NAME_SHIRT", nullable = false)
     private String nameShirt;
 
     // * có thể nhiều vị trí, sẽ lưu chuỗi position
@@ -51,4 +51,7 @@ public class FootBallClubMemberEntity extends BaseEntity {
 
     @Column(name = "ADDRESS", length = 1000)
     private String address;
+
+    @Column(name = "IS_CAPTAIN")
+    private Boolean isCaptain;
 }
