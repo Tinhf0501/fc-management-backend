@@ -17,6 +17,9 @@ public class SystemConfigEntity extends BaseEntity {
     @Column(name = "CONFIG_ID", nullable = false)
     private Long configId;
 
+    @Column(name = "CONFIG_KEY", nullable = false)
+    private String configKey;
+
     @Column(name = "CONFIG_CODE", nullable = false)
     private String configCode;
 

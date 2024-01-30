@@ -21,6 +21,7 @@ public class FCResourceEntity extends BaseEntity {
     @Column(name = "PATH", length = 1000, nullable = false)
     private String path;
 
+    // * type : video, picture
     @Column(name = "TYPE", nullable = false)
     private String type;
 

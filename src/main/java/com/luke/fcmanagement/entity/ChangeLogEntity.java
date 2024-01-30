@@ -27,6 +27,12 @@ public class ChangeLogEntity extends BaseEntity {
     @Column(name = "TABLE_ID", nullable = false)
     private String tableId;
 
-    @Column(name = "TYPE", nullable = false)
-    private String type;
+    @Column(name = "TABLE_NAME", nullable = false)
+    private String tableName;
+
+    @Column(name = "RECORD_OLD", nullable = false)
+    private String recordOld;
+
+    @Column(name = "NOTE", nullable = false)
+    private String note;
 }

@@ -37,6 +37,9 @@ public class MatchFixtureEntity extends BaseEntity{
     @Column(name = "DESCRIPTION", length = 2000)
     private String description;
 
+    @Column(name = "MATCH_NAME", length = 2000)
+    private String matchName;
+
     @Column(name = "STATUS", nullable = false)
     private String status;
 }
