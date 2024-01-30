@@ -51,7 +51,4 @@ public class FootBallClubMemberEntity extends BaseEntity {
 
     @Column(name = "ADDRESS", length = 1000)
     private String address;
-
-    @Column(name = "IS_CAPTAIN")
-    private Boolean isCaptain;
 }

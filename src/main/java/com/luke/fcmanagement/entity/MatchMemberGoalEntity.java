@@ -26,6 +26,12 @@ public class MatchMemberGoalEntity extends BaseEntity {
     @Column(name = "GOALS", nullable = false)
     private Integer goals;
 
+    @Column(name = "GOALS_OG", nullable = false)
+    private Integer goalsOG;
+
+    @Column(name = "DESCRIPTION", length = 2000)
+    private String description;
+
     @Column(name = "STATUS", nullable = false)
     private String status;
 }

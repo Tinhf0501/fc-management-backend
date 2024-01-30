@@ -35,4 +35,8 @@ public class MatchResultEntity extends BaseEntity {
 
     @Column(name = "DESCRIPTION", length = 2000)
     private String description;
+
+    @Column(name = "MATCH_ID", nullable = false)
+    private Long matchId;
+
 }
