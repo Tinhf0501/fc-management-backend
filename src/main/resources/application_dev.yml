@@ -8,7 +8,7 @@ spring:
     activate:
       on-profile: "dev"
   datasource:
-    url: jdbc:mysql://localhost:3306/fc_management
+    url: jdbc:mysql://localhost:3306/fc_management?createDatabaseIfNotExist=true
     username: root
     password: Tinh0501@@123
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -22,8 +22,9 @@ spring:
 
 database:
   dump:
-    path: "classpath:/db_dump/"
-  con_job: 0 37 10 * * ?
+    target_path: "classpath:/dump/"
+    absolute_path: "D:\\EXAMPLE\\FC_MANAGEMENT\\BE\\fc-management-backend\\dump\\"
+  job: 0 52 16 * * ?
 
 build:
   version: "1.0"

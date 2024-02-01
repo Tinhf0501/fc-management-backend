@@ -5,7 +5,6 @@ import com.luke.fcmanagement.constants.StatusApi;
 import com.luke.fcmanagement.model.ApiError;
 import com.luke.fcmanagement.model.ApiResponse;
 import com.luke.fcmanagement.model.ErrorMsg;
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.DirectFieldBindingResult;
