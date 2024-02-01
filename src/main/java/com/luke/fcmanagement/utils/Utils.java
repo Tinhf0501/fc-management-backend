@@ -5,8 +5,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-@AllArgsConstructor
-@NoArgsConstructor
 public class Utils {
     public static String getIpAddress() {
         String ipAddress = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())

@@ -16,7 +16,6 @@ public class ApiExceptionHandler {
     /**
      * Tất cả các Exception không được khai báo sẽ được xử lý tại đây
      */
-
     @ExceptionHandler(Exception.class)
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     public ApiResponse handleAllException(Exception ex, WebRequest request) {
@@ -24,4 +23,6 @@ public class ApiExceptionHandler {
         ApiError apiError = new ApiError(errorMessage);
         return new ApiResponse(null, apiError, ErrorCode.INTERNAL_ERROR.getCode(), StatusApi.FAIL.getStatus(),0L);
     }
+
+
 }
