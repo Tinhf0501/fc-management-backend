@@ -9,13 +9,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
 //@AllArgsConstructor
 //@NoArgsConstructor
 public class FootballClubController {
     @PostMapping("/test")
-    private ResponseEntity<ApiResponse> test(@Valid CreateFCMemberRequest request) {
+    private ResponseEntity<ApiResponse> test(@Valid @RequestBody CreateFCMemberRequest request) {
         return ResponseEntity.ok(new ApiResponse());
     }
 }
