@@ -7,7 +7,7 @@ and open the template in the editor.
 <configuration>
     <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
         <layout class="ch.qos.logback.classic.PatternLayout">
-            <Pattern>%date %level [%M.%line] %msg%n</Pattern>
+            <Pattern>%date %level [%M.%line] %msg%n TraceId:%X{traceId}%n</Pattern>
         </layout>
     </appender>
     <!-- LOG everything at INFO level -->

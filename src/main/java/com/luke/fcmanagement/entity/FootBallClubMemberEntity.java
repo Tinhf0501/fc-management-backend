@@ -34,7 +34,7 @@ public class FootBallClubMemberEntity extends BaseEntity {
     @Column(name = "POSITION", nullable = false)
     private String position;
 
-    @Column(name = "AVATAR", length = 1000)
+    @Column(name = "AVATAR", length = 2000)
     private String avatar;
 
     @Column(name = "DESCRIPTION", length = 2000)
@@ -46,9 +46,12 @@ public class FootBallClubMemberEntity extends BaseEntity {
     @Column(name = "FULL_NAME", nullable = false)
     private String fullName;
 
-    @Column(name = "PHONE_NUMBER")
+    @Column(name = "PHONE_NUMBER", length = 10)
     private String phoneNumber;
 
-    @Column(name = "ADDRESS", length = 1000)
+    @Column(name = "ADDRESS", length = 2000)
     private String address;
+
+    @Column(name = "DATE_OF_BIRTHDAY", length = 1000)
+    private String dateOfBirthday;
 }
