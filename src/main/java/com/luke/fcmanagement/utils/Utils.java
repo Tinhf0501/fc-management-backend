@@ -7,6 +7,6 @@ public class Utils {
     public static String getIpAddress() {
         String ipAddress = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
                 .getRequest().getRemoteAddr();
-        return "Client IP Address: " + ipAddress;
+        return ipAddress;
     }
 }

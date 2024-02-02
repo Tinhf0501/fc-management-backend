@@ -15,7 +15,7 @@ import java.util.UUID;
 @Component
 @Slf4j
 @AllArgsConstructor
-public class TraceIdFilter implements Filter {
+public class LogFilter implements Filter {
     private static final String TRACE_ID_KEY = "traceId";
     private ObjectMapper mapper;
 
@@ -36,12 +36,12 @@ public class TraceIdFilter implements Filter {
             // Đặt traceId vào MDC để có thể sử dụng trong log
             MDC.put(TRACE_ID_KEY, traceId);
 
-            log.info("{} send request : {}", Utils.getIpAddress(), mapper.writeValueAsString(servletRequest.getInputStream()));
+            log.info("Client IP : {} send request : {}", Utils.getIpAddress(), mapper.writeValueAsString(servletRequest.getInputStream()));
 
             // * Chuyển tiếp request và response cho filter tiếp theo
             filterChain.doFilter(servletRequest, servletResponse);
         } finally {
-            log.info("{} receive response : {}", Utils.getIpAddress(), mapper.writeValueAsString(servletResponse.getOutputStream()));
+            log.info("Client IP : l{} receive response : {}", Utils.getIpAddress(), mapper.writeValueAsString(servletResponse.getOutputStream()));
             // *  Luôn đảm bảo rằng bạn xóa traceId khỏi MDC sau khi xử lý xong
             MDC.remove(TRACE_ID_KEY);
         }
