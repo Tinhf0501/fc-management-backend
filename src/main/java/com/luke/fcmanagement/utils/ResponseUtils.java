@@ -2,19 +2,11 @@ package com.luke.fcmanagement.utils;
 
 import com.luke.fcmanagement.constants.ErrorCode;
 import com.luke.fcmanagement.constants.StatusApi;
-import com.luke.fcmanagement.model.ApiError;
 import com.luke.fcmanagement.model.ApiResponse;
-import com.luke.fcmanagement.model.ErrorMsg;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.DirectFieldBindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.validation.beanvalidation.SpringValidatorAdapter;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Component
 @Slf4j
