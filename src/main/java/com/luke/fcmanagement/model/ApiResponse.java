@@ -16,5 +16,5 @@ public class ApiResponse {
     private ApiError apiError;
     private String code;
     private String status;
-    private Long traceId;
+    private String traceId;
 }
