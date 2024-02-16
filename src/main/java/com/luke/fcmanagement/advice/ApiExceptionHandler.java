@@ -1,12 +1,9 @@
 package com.luke.fcmanagement.advice;
 
-import com.luke.fcmanagement.constants.AppConstants;
 import com.luke.fcmanagement.constants.ErrorCode;
-import com.luke.fcmanagement.constants.StatusApi;
 import com.luke.fcmanagement.model.ApiError;
 import com.luke.fcmanagement.model.ApiResponse;
 import com.luke.fcmanagement.model.ErrorMsg;
-import org.slf4j.MDC;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;

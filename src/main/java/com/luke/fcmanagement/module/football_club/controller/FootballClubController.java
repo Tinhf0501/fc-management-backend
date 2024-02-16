@@ -1,11 +1,9 @@
 package com.luke.fcmanagement.module.football_club.controller;
 
-import com.luke.fcmanagement.constants.AppConstants;
 import com.luke.fcmanagement.model.ApiResponse;
 import com.luke.fcmanagement.module.football_club.dto.request.CreateFCMemberRequest;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.MDC;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

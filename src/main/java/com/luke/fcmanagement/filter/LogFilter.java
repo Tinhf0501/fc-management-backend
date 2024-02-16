@@ -3,12 +3,13 @@ package com.luke.fcmanagement.filter;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.luke.fcmanagement.constants.AppConstants;
+import com.luke.fcmanagement.model.RequestWrapper;
 import com.luke.fcmanagement.utils.Utils;
-import jakarta.servlet.*;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
@@ -17,7 +18,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.ContentCachingResponseWrapper;
 
-import java.io.*;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
@@ -41,31 +42,38 @@ public class LogFilter extends OncePerRequestFilter {
             // * Đặt traceId vào MDC để có thể sử dụng trong log
             MDC.put(AppConstants.TRACE_ID_KEY, traceId);
             MDC.put(AppConstants.START_TIME, String.valueOf(System.currentTimeMillis()));
-            Request requestLog = new Request(
-                    httpServletRequest.getMethod(),
-                    httpServletRequest.getRequestURI(),
-                    getParameters(httpServletRequest),
-                    null
-            );
-            InputStream inputStream = httpServletRequest.getInputStream();
-            if (!Objects.equals(httpServletRequest.getMethod(), HttpMethod.GET.name()) && inputStream.available() > 0) {
-                requestLog.setReqBody(mapper.readValue(inputStream, Object.class));
-            }
-            log.info("{} send request: {}", Utils.getIpAddress(), mapper.writerWithDefaultPrettyPrinter().writeValueAsString(requestLog));
+            logRequest(requestWrapper);
             // * Chuyển tiếp request và response cho filter tiếp theo
-            filterChain.doFilter(httpServletRequest, httpServletResponse);
+            filterChain.doFilter(requestWrapper, resp);
 
         } finally {
-//            Object object = getResponseBody(resp);
-//            Response responseLog = new Response(
-//                    httpServletRequest.getMethod(),
-//                    httpServletRequest.getRequestURI(),
-//                    null,
-//                    httpServletResponse.getStatus());
-//            log.info("{} : receive response: {}", Utils.getIpAddress(), mapper.writerWithDefaultPrettyPrinter().writeValueAsString(responseLog));
+            logResponse(resp, httpServletRequest, httpServletResponse);
             // *  Luôn đảm bảo rằng bạn xóa traceId khỏi MDC sau khi xử lý xong
             MDC.clear();
         }
+    }
+
+    private void logRequest(RequestWrapper request) throws IOException {
+        Request requestLog = new Request(
+                request.getMethod(),
+                request.getRequestURI(),
+                getParameters(request),
+                null
+        );
+        if (!Objects.equals(request.getMethod(), HttpMethod.GET.name())) {
+            requestLog.setReqBody(mapper.readValue(request.getBody(), Object.class));
+        }
+        log.info("{} send request: {}", Utils.getIpAddress(), mapper.writerWithDefaultPrettyPrinter().writeValueAsString(requestLog));
+    }
+
+    private void logResponse(ContentCachingResponseWrapper resp, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        Object object = getResponseBody(resp);
+        Response responseLog = new Response(
+                request.getMethod(),
+                request.getRequestURI(),
+                object,
+                response.getStatus());
+        log.info("{} : receive response: {}", Utils.getIpAddress(), mapper.writerWithDefaultPrettyPrinter().writeValueAsString(responseLog));
     }
 
     private Object getResponseBody(ContentCachingResponseWrapper response) throws IOException {
