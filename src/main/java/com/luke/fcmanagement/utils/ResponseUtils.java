@@ -17,12 +17,6 @@ public class ResponseUtils {
         ResponseUtils.springValidatorAdapter = springValidatorAdapter;
     }
 
-    public static ApiResponse setOKResponse(ApiResponse apiResponse) {
-        apiResponse.setCode(ErrorCode.SUCCESS.getCode());
-        apiResponse.setStatus(StatusApi.OK.getStatus());
-        return apiResponse;
-    }
-
     public static boolean isInvalidObject(Object object) {
         DirectFieldBindingResult directFieldBindingResult = new DirectFieldBindingResult(object, "USER");
         springValidatorAdapter.validate(object, directFieldBindingResult);

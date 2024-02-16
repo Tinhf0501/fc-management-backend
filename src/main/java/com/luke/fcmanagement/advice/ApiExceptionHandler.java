@@ -29,7 +29,7 @@ public class ApiExceptionHandler {
     public ApiResponse handleAllException(Exception ex, WebRequest request) {
         ErrorMsg errorMessage = new ErrorMsg(ex.getLocalizedMessage(), null);
         ApiError apiError = new ApiError(errorMessage);
-        return new ApiResponse(null, apiError, ErrorCode.INTERNAL_ERROR.getCode(), StatusApi.FAIL.getStatus(), MDC.get(AppConstants.TRACE_ID_KEY));
+        return ApiResponse.fail(ErrorCode.INTERNAL_ERROR, apiError);
     }
 
     @ExceptionHandler(BindException.class)
@@ -39,7 +39,7 @@ public class ApiExceptionHandler {
         Map<String, Object> err = bindingResult.getFieldErrors().stream().collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage));
         ErrorMsg errorMessage = new ErrorMsg(ErrorCode.VALIDATE_FAIL.getMessage(), err);
         ApiError apiError = new ApiError(errorMessage);
-        return new ApiResponse(null, apiError, ErrorCode.INTERNAL_ERROR.getCode(), StatusApi.FAIL.getStatus(), MDC.get(AppConstants.TRACE_ID_KEY));
+        return ApiResponse.fail(ErrorCode.VALIDATE_FAIL, apiError);
     }
 
 }

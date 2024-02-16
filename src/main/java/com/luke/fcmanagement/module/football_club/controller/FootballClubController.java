@@ -20,12 +20,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class FootballClubController {
     @PostMapping("/test")
     public ResponseEntity<ApiResponse> test(@Valid @RequestBody CreateFCMemberRequest request) {
-        return ResponseEntity.ok(new ApiResponse(null, null, "00", "OK", MDC.get(AppConstants.TRACE_ID_KEY)));
+        return ResponseEntity.ok(ApiResponse.ok(null));
     }
 
     @GetMapping("/test")
     public ResponseEntity<ApiResponse> testGet(@RequestParam(name = "a") int a) {
-        return ResponseEntity.ok(new ApiResponse(null, null, "00", "OK", MDC.get(AppConstants.TRACE_ID_KEY)));
+        return ResponseEntity.ok(ApiResponse.ok(null));
     }
 
 }
