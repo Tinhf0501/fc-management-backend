@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 //@NoArgsConstructor
 @Slf4j
 public class FootballClubController {
-    @PostMapping("/test")
+    @PostMapping("/test1")
     public ResponseEntity<ApiResponse> test(@Valid @RequestBody CreateFCMemberRequest request) {
         return ResponseEntity.ok(ApiResponse.ok(null));
     }
