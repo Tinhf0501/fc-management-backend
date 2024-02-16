@@ -8,8 +8,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 //@AllArgsConstructor
@@ -20,4 +22,10 @@ public class FootballClubController {
     public ResponseEntity<ApiResponse> test(@Valid @RequestBody CreateFCMemberRequest request) {
         return ResponseEntity.ok(new ApiResponse(null, null, "00", "OK", MDC.get(AppConstants.TRACE_ID_KEY)));
     }
+
+    @GetMapping("/test")
+    public ResponseEntity<ApiResponse> testGet(@RequestParam(name = "a") int a) {
+        return ResponseEntity.ok(new ApiResponse(null, null, "00", "OK", MDC.get(AppConstants.TRACE_ID_KEY)));
+    }
+
 }
