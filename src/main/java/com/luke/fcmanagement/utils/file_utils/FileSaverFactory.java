@@ -7,7 +7,7 @@ import com.luke.fcmanagement.utils.file_utils.impl.LocalSaveFile;
 import java.util.Objects;
 
 public class FileSaverFactory {
-    public static FileSaver getFileSaver(String typeString) {
+    public static final FileSaver getFileSaver(String typeString) {
         SaveFileType type = SaveFileType.getType(typeString);
         FileSaver fileSaver = null;
         switch (type) {
