@@ -2,10 +2,12 @@ package com.luke.fcmanagement.utils.file_utils.impl;
 
 import com.luke.fcmanagement.utils.file_utils.FileSaver;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+
 
 public class LocalSaveFile implements FileSaver {
     @Value("${media.absolute-path}")

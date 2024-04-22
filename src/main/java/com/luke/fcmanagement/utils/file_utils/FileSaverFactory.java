@@ -3,9 +3,11 @@ package com.luke.fcmanagement.utils.file_utils;
 import com.luke.fcmanagement.constants.SaveFileType;
 import com.luke.fcmanagement.utils.file_utils.FileSaver;
 import com.luke.fcmanagement.utils.file_utils.impl.LocalSaveFile;
+import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 
+@Component
 public class FileSaverFactory {
     public static final FileSaver getFileSaver(String typeString) {
         SaveFileType type = SaveFileType.getType(typeString);
