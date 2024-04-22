@@ -22,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Objects;
 
@@ -107,8 +108,33 @@ public class FootballClubService implements IFootballClubService {
         }
 
         if (Objects.nonNull(request.getFcResources().getMedia()) && request.getFcResources().getMedia().length > 0) {
-            if (!FileChecker.isValidListFile(request.getFcResources().getMedia())){
-                throw new RuntimeException("List file invalid");
+            if (!FileChecker.isValidListFile(request.getFcResources().getMedia())) {
+                throw new RuntimeException("List resource files invalid");
+            } else {
+                for (MultipartFile file : request.getFcResources().getMedia()) {
+                    String fileName = fcSaved.getFcId() + "_" + file.getOriginalFilename();
+                    String pathSave;
+                    String type;
+                    String desc;
+                    if (FileChecker.isJPG(file)) {
+                        pathSave = fileSaver.saveFile(file, fcImgPath, fileName);
+                        type = FCMediaType.LOGO.getValue();
+                        desc = FCMediaType.LOGO.getDisplay();
+                    } else {
+                        pathSave = fileSaver.saveFile(file, fcVideoPath, fileName);
+                        type = FCMediaType.VIDEO.getValue();
+                        desc = FCMediaType.VIDEO.getDisplay();
+                    }
+
+                    FCResourceEntity logo = FCResourceEntity
+                            .builder()
+                            .path(pathSave)
+                            .fcId(fcSaved.getFcId())
+                            .type(type)
+                            .description(desc)
+                            .build();
+                    fcResourceRepository.save(logo);
+                }
             }
         }
 
