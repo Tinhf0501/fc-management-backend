@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 
+import java.util.List;
+
 @Getter
 @Setter
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -21,7 +23,9 @@ public class CreateFCRequest {
     @Length(max = 2000, message = "Độ dài của mô tả không được vượt quá 2000 kí tự")
     private String description;
 
-    private CreateFCMemberRequest fcMember;
+    private Boolean isGuest;
 
-    private CreateFCResourceRequest fcResource;
+    private List<CreateFCMemberRequest> fcMembers;
+
+    private CreateFCResourceRequest fcResources;
 }

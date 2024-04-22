@@ -3,6 +3,7 @@ package com.luke.fcmanagement.filter;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.luke.fcmanagement.constants.AppConstants;
+import com.luke.fcmanagement.model.ApiResponse;
 import com.luke.fcmanagement.model.RequestWrapper;
 import com.luke.fcmanagement.utils.Utils;
 import jakarta.servlet.FilterChain;
@@ -46,7 +47,6 @@ public class LogFilter extends OncePerRequestFilter {
             logRequest(requestWrapper);
             // * Chuyển tiếp request và response cho filter tiếp theo
             filterChain.doFilter(requestWrapper, resp);
-
         } finally {
             logResponse(resp, httpServletRequest, httpServletResponse);
             // *  Luôn đảm bảo rằng bạn xóa traceId khỏi MDC sau khi xử lý xong
@@ -69,12 +69,18 @@ public class LogFilter extends OncePerRequestFilter {
 
     private void logResponse(ContentCachingResponseWrapper resp, HttpServletRequest request, HttpServletResponse response) throws IOException {
         Object object = getResponseBody(resp);
+        ApiResponse responseParse = mapper.convertValue(object, ApiResponse.class);
         Response responseLog = new Response(
                 request.getMethod(),
                 request.getRequestURI(),
                 object,
                 response.getStatus());
-        log.info("{} : receive response: {}", Utils.getIpAddress(), mapper.writerWithDefaultPrettyPrinter().writeValueAsString(responseLog));
+
+        log.info("{} : receive response: {} after {} ms",
+                Utils.getIpAddress(),
+                mapper.writerWithDefaultPrettyPrinter().writeValueAsString(responseLog),
+                responseParse.getDuration()
+        );
     }
 
     private Object getResponseBody(ContentCachingResponseWrapper response) throws IOException {

@@ -20,11 +20,23 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
 
-database:
-  dump:
-    target_path: "classpath:/dump/"
-    absolute_path: "D:\\EXAMPLE\\FC_MANAGEMENT\\BE\\fc-management-backend\\dump\\"
-  job: 0 52 16 * * ?
+#database:
+#  dump:
+#    target_path: "classpath:/dump/"
+#    absolute_path: "D:\\EXAMPLE\\FC_MANAGEMENT\\BE\\fc-management-backend\\dump\\"
+#  job: 0 52 16 * * ?
+
+media:
+  absolute-path: "D:\\EXAMPLE\\FC_MANAGEMENT\\BE\\fc-management-backend\\src\\main\\resources\\"
+  member:
+    path: "/member/avatar/"
+  fc:
+    img-path: "/fc/imgs/"
+    logo-path: "/fc/logo/"
+    videos-path: "/fc/videos/"
+file:
+  save:
+    type: "local"
 
 build:
   version: "1.0"

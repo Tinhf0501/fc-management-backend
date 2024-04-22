@@ -11,6 +11,7 @@ import org.hibernate.annotations.GenericGenerator;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "TB_FOOTBALL_CLUB_MEMBER")
+@Builder
 public class FootBallClubMemberEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")

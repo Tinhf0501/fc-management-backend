@@ -10,6 +10,7 @@ import org.hibernate.annotations.GenericGenerator;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "TB_FOOTBALL_CLUB")
+@Builder
 public class FootballClubEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
@@ -25,4 +26,7 @@ public class FootballClubEntity extends BaseEntity {
 
     @Column(name = "STATUS", nullable = false)
     private String status;
+
+    @Column(name = "IS_GUEST")
+    private Boolean isGuest;
 }
