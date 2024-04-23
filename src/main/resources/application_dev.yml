@@ -4,6 +4,10 @@ server:
     context-path: /api
 
 spring:
+  servlet:
+    multipart:
+      max-file-size: 5MB # Cấu hình kích thước tối đa cho một file được upload (5MB ở đây)
+      max-request-size: 10MB # Cấu hình kích thước tối đa cho một request chứa nhiều file
   config:
     activate:
       on-profile: "dev"
@@ -27,7 +31,7 @@ spring:
 #  job: 0 52 16 * * ?
 
 media:
-  absolute-path: "D:\\EXAMPLE\\FC_MANAGEMENT\\BE\\fc-management-backend\\src\\main\\resources\\"
+  absolute-path: "D:/EXAMPLE/FC_MANAGEMENT/BE/fc-management-backend/upload"
   member:
     path: "/member/avatar/"
   fc:
@@ -36,7 +40,7 @@ media:
     videos-path: "/fc/videos/"
 file:
   save:
-    type: "local"
+    type: "LOCAL"
 
 build:
   version: "1.0"

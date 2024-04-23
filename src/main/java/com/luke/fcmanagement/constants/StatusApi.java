@@ -8,10 +8,11 @@ import lombok.Getter;
 @AllArgsConstructor
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum StatusApi {
-    OK("OK"),
-    FAIL("FAIL"),
-    UNKNOWN("Không xác định");
+    OK("OK", "Trạng thái thành công"),
+    FAIL("FAIL", "Trạng thái thất bại"),
+    UNKNOWN("UNKNOWN","Không xác định");
     private String status;
+    private String desc;
 
     public static StatusApi getStatus(String value) {
         for (StatusApi entity : values()) {
