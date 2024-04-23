@@ -1,5 +1,6 @@
 package com.luke.fcmanagement.module.football_club.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -44,5 +45,6 @@ public class CreateFCMemberRequest {
     @Size(min = 1, message = "Phải có ít nhất 1 vị trí gán cho thành viên")
     private List<String> position;
 
+    @JsonIgnore
     private MultipartFile avatar;
 }

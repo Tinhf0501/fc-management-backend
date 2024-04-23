@@ -8,12 +8,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 @Slf4j
+@RequestMapping("/fc")
 public class FootballClubController {
     private final IFootballClubService footballClubService;
 //    @PostMapping("/test1")
@@ -27,7 +28,15 @@ public class FootballClubController {
 //    }
 
     @PostMapping("/create")
-    public ResponseEntity<ApiResponse> create(@Valid @RequestBody CreateFCRequest request) {
+    public ResponseEntity<ApiResponse> create(
+            @Valid CreateFCRequest request
+    ) {
         return ResponseEntity.ok(footballClubService.createFC(request));
+    }
+
+    @GetMapping("/test")
+    public ResponseEntity<ApiResponse> test(
+    ) {
+        return ResponseEntity.ok(ApiResponse.ok(null));
     }
 }
