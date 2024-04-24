@@ -1,9 +1,9 @@
 package com.luke.fcmanagement.module.football_club.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.luke.fcmanagement.model.ApiResponse;
 import com.luke.fcmanagement.module.football_club.dto.request.CreateFCRequest;
-import org.springframework.web.multipart.MultipartFile;
 
 public interface IFootballClubService {
-    ApiResponse createFC(CreateFCRequest request);
+    ApiResponse createFC(CreateFCRequest request) throws JsonProcessingException;
 }

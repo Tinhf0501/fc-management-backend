@@ -1,5 +1,6 @@
 package com.luke.fcmanagement.module.football_club.service.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.luke.fcmanagement.constants.*;
 import com.luke.fcmanagement.entity.FCResourceEntity;
 import com.luke.fcmanagement.entity.FootBallClubMemberEntity;
@@ -13,9 +14,11 @@ import com.luke.fcmanagement.module.football_club.service.IFootballClubService;
 import com.luke.fcmanagement.repository.FCResourceRepository;
 import com.luke.fcmanagement.repository.FootballClubMemberRepository;
 import com.luke.fcmanagement.repository.FootballClubRepository;
+import com.luke.fcmanagement.utils.Utils;
 import com.luke.fcmanagement.utils.file_utils.FileChecker;
 import com.luke.fcmanagement.utils.file_utils.FileSaver;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,11 +28,13 @@ import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class FootballClubService implements IFootballClubService {
     private final FootballClubRepository footballClubRepository;
     private final FootballClubMemberRepository footballClubMemberRepository;
     private final FCResourceRepository fcResourceRepository;
     private final FileSaver fileSaver;
+    private final Utils utils;
 
     @Value("${file.save.type}")
     private String saveFileType;
@@ -48,9 +53,7 @@ public class FootballClubService implements IFootballClubService {
 
     @Override
     @Transactional(rollbackFor = Throwable.class)
-    public ApiResponse createFC(CreateFCRequest request) {
-        System.out.println(saveFileType);
-        System.out.println(memberPath);
+    public ApiResponse createFC(CreateFCRequest request) throws JsonProcessingException {
         ApiResponse response = new ApiResponse();
         if (!isValidFC(request, request.getFcResources().getMedia())) {
             ApiError error = new ApiError();
@@ -64,10 +67,9 @@ public class FootballClubService implements IFootballClubService {
                 .fcName(request.getFcName())
                 .description(request.getDescription())
                 .status(FCStatus.INACTIVE.getValue())
+                .isGuest(request.getIsGuest())
                 .build();
         FootballClubEntity fcSaved = footballClubRepository.save(fc);
-
-        // * get File Saver
 
         // * save FC Member
         if (Objects.nonNull(request.getFcMembers())) {
@@ -143,6 +145,10 @@ public class FootballClubService implements IFootballClubService {
                 }
             }
         }
+
+        // * save log
+        utils.saveHisLog(StatusHis.SUCCESS.getStatus(), ActionType.CREATE_FC.getValue());
+
         ApiBody apiBody = new ApiBody();
         apiBody.put(FieldConstant.MESSAGE, Message.CREATE_FC_SUCCESS);
         return ApiResponse.ok(apiBody);

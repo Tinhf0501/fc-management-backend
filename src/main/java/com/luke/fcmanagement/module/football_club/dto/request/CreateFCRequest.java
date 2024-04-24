@@ -1,5 +1,6 @@
 package com.luke.fcmanagement.module.football_club.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -27,5 +28,6 @@ public class CreateFCRequest {
 
     private List<CreateFCMemberRequest> fcMembers;
 
+    @JsonIgnore
     private CreateFCResourceRequest fcResources;
 }

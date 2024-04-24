@@ -10,8 +10,9 @@ import org.hibernate.annotations.GenericGenerator;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "TB_CHANGE_LOG")
-public class ChangeLogEntity extends BaseEntity {
+@Entity(name = "TB_HIS_LOG")
+@Builder
+public class HisLogEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native")
@@ -24,15 +25,9 @@ public class ChangeLogEntity extends BaseEntity {
     @Column(name = "ACTION", nullable = false)
     private String action;
 
-    @Column(name = "TABLE_ID", nullable = false)
-    private String tableId;
+    @Column(name = "TRACE_ID", nullable = false)
+    private String traceID;
 
-    @Column(name = "TABLE_NAME", nullable = false)
-    private String tableName;
-
-    @Column(name = "RECORD_OLD", nullable = false)
-    private String recordOld;
-
-    @Column(name = "NOTE", nullable = false)
-    private String note;
+    @Column(name = "API_PATH", nullable = false)
+    private String apiPath;
 }
