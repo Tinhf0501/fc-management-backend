@@ -1,6 +1,6 @@
-package com.luke.fcmanagement.utils.file_utils.impl;
+package com.luke.fcmanagement.module.file.impl;
 
-import com.luke.fcmanagement.utils.file_utils.FileSaver;
+import com.luke.fcmanagement.module.file.FileSaver;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
@@ -27,7 +27,11 @@ public class LocalFileSaver implements FileSaver {
     public String saveFile(MultipartFile file, String folderPath, String fileName) {
         try {
             String pathSave = folderPath + fileName;
-            file.transferTo(new File(pathAbsolute + pathSave));
+            final File f = new File(pathAbsolute + pathSave);
+            if (!f.exists()) {
+                f.mkdirs();
+            }
+            file.transferTo(f);
             return pathSave;
         } catch (IOException ex) {
             throw new RuntimeException(ex);

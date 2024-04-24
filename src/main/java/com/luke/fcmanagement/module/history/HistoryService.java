@@ -1,4 +1,4 @@
-package com.luke.fcmanagement.utils;
+package com.luke.fcmanagement.module.history;
 
 import com.luke.fcmanagement.constants.AppConstants;
 import com.luke.fcmanagement.entity.HisLogEntity;
@@ -6,20 +6,15 @@ import com.luke.fcmanagement.repository.HisLogRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.MDC;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+@Service
 @RequiredArgsConstructor
-@Component
-public class Utils {
-    private final HisLogRepository hisLogRepository;
+public class HistoryService {
 
-    public static String getIpAddress() {
-        String ipAddress = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
-                .getRequest().getRemoteAddr();
-        return ipAddress;
-    }
+    private final HisLogRepository hisLogRepository;
 
     public void saveHisLog(String status, String actionType) {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
@@ -31,6 +26,6 @@ public class Utils {
                 .action(actionType)
                 .apiPath(request.getRequestURI())
                 .build();
-        hisLogRepository.save(hisLog);
+        this.hisLogRepository.save(hisLog);
     }
 }

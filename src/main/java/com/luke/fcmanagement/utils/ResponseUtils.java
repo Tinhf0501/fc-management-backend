@@ -1,26 +1,20 @@
 package com.luke.fcmanagement.utils;
 
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
-import org.springframework.validation.DirectFieldBindingResult;
-import org.springframework.validation.beanvalidation.SpringValidatorAdapter;
+import com.luke.fcmanagement.constants.AppConstants;
+import com.luke.fcmanagement.model.ApiResponse;
+import lombok.experimental.UtilityClass;
+import org.apache.commons.lang3.math.NumberUtils;
+import org.slf4j.MDC;
 
-@Component
-@Slf4j
+@UtilityClass
 public class ResponseUtils {
-    private static SpringValidatorAdapter springValidatorAdapter;
 
-    public ResponseUtils(SpringValidatorAdapter springValidatorAdapter) {
-        ResponseUtils.springValidatorAdapter = springValidatorAdapter;
-    }
-
-    public static boolean isInvalidObject(Object object) {
-        DirectFieldBindingResult directFieldBindingResult = new DirectFieldBindingResult(object, "USER");
-        springValidatorAdapter.validate(object, directFieldBindingResult);
-        if (directFieldBindingResult.hasErrors()) {
-            return true;
-        }
-        return false;
+    public void setTraceIdAndDuration(ApiResponse response) {
+        final long endTime = System.currentTimeMillis();
+        final String startTime = MDC.get(AppConstants.START_TIME);
+        final long startTimeNum = NumberUtils.toLong(startTime, endTime);
+        response.setTraceId(MDC.get(AppConstants.TRACE_ID_KEY));
+        response.setDuration(endTime - startTimeNum);
     }
 
 }

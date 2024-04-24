@@ -1,36 +1,26 @@
 package com.luke.fcmanagement.model;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.luke.fcmanagement.constants.AppConstants;
 import com.luke.fcmanagement.constants.ErrorCode;
-import com.luke.fcmanagement.constants.StatusApi;
+import com.luke.fcmanagement.constants.Status;
 import lombok.*;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.slf4j.MDC;
 
-@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ApiResponse {
     private ApiBody apiBody;
     private ApiError apiError;
     private ErrorCode code;
-    private StatusApi status;
-
-    @Setter(AccessLevel.PRIVATE)
+    private Status status;
     private String traceId;
-
-    @Setter(AccessLevel.PRIVATE)
     private long duration;
-
-    public ApiResponse(Object o, ApiError apiError, String code, String status) {
-    }
 
     public static ApiResponse ok(ApiBody apiBody) {
         ApiResponse apiResponse = new ApiResponse();
-        apiResponse.setStatus(StatusApi.OK);
+        apiResponse.setStatus(Status.SUCCESS);
         apiResponse.setCode(ErrorCode.SUCCESS);
         apiResponse.setApiBody(apiBody);
         return apiResponse;
@@ -38,10 +28,15 @@ public class ApiResponse {
 
     public static ApiResponse fail(ErrorCode code, ApiError apiError) {
         ApiResponse apiResponse = new ApiResponse();
-        apiResponse.setStatus(StatusApi.FAIL);
+        apiResponse.setStatus(Status.FAIL);
         apiResponse.setCode(code);
         apiResponse.setApiError(apiError);
         return apiResponse;
+    }
+
+    public static ApiResponse fail(ErrorCode code) {
+        ApiError apiError = new ApiError(code.getMessage(), null);
+        return ApiResponse.fail(code, apiError);
     }
 
     public String getTraceId() {

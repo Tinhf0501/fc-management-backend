@@ -11,7 +11,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter
-@JsonInclude(JsonInclude.Include.NON_NULL)
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateFCResourceRequest {

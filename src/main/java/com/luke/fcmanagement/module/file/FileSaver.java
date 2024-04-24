@@ -1,4 +1,4 @@
-package com.luke.fcmanagement.utils.file_utils;
+package com.luke.fcmanagement.module.file;
 
 import org.springframework.web.multipart.MultipartFile;
 

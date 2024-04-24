@@ -1,8 +1,8 @@
 package com.luke.fcmanagement.module.football_club.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,7 +13,6 @@ import java.util.List;
 
 @Getter
 @Setter
-@JsonInclude(JsonInclude.Include.NON_NULL)
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateFCRequest {
@@ -21,7 +20,7 @@ public class CreateFCRequest {
     @Length(max = 255, message = "Độ dài của tên FC không được vượt quá 255 kí tự")
     private String fcName;
 
-    @Length(max = 2000, message = "Độ dài của mô tả không được vượt quá 2000 kí tự")
+    @Size(max = 2000, message = "Độ dài của mô tả không được vượt quá 2000 kí tự")
     private String description;
 
     private Boolean isGuest;

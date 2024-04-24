@@ -1,0 +1,19 @@
+package com.luke.fcmanagement.exception;
+
+import com.luke.fcmanagement.constants.ErrorCode;
+import lombok.Getter;
+
+public class BusinessException extends RuntimeException {
+
+    @Getter
+    private ErrorCode errorCode;
+
+    public BusinessException(String message) {
+        super(message);
+    }
+
+    public BusinessException(ErrorCode errorCode) {
+        super(errorCode.getMessage());
+        this.errorCode = errorCode;
+    }
+}

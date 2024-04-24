@@ -1,8 +1,10 @@
-package com.luke.fcmanagement.utils.file_utils;
+package com.luke.fcmanagement.module.file;
 
 import org.springframework.web.multipart.MultipartFile;
 
-public class FileChecker {
+import java.util.stream.Stream;
+
+public class FileUtils {
     public static boolean isMP4(MultipartFile file) {
         String fileName = file.getOriginalFilename();
         return fileName != null && fileName.toLowerCase().endsWith(".mp4");
@@ -14,15 +16,7 @@ public class FileChecker {
     }
 
     public static boolean isValidListFile(MultipartFile[] files) {
-        boolean check = true;
-        for (MultipartFile file : files) {
-            if (isMP4(file) || isJPG(file)) {
-                check = true;
-            } else {
-                check = false;
-                break;
-            }
-        }
-        return check;
+        return Stream.of(files)
+                .anyMatch(file -> !isMP4(file) && !isJPG(file));
     }
 }

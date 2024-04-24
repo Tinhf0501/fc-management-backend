@@ -1,24 +1,26 @@
 package com.luke.fcmanagement.module.football_club.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.luke.fcmanagement.constants.*;
 import com.luke.fcmanagement.entity.FCResourceEntity;
 import com.luke.fcmanagement.entity.FootBallClubMemberEntity;
 import com.luke.fcmanagement.entity.FootballClubEntity;
+import com.luke.fcmanagement.exception.BusinessException;
 import com.luke.fcmanagement.model.ApiBody;
-import com.luke.fcmanagement.model.ApiError;
 import com.luke.fcmanagement.model.ApiResponse;
-import com.luke.fcmanagement.model.ErrorMsg;
+import com.luke.fcmanagement.module.file.FileSaver;
+import com.luke.fcmanagement.module.file.FileUtils;
 import com.luke.fcmanagement.module.football_club.dto.request.CreateFCRequest;
 import com.luke.fcmanagement.module.football_club.service.IFootballClubService;
+import com.luke.fcmanagement.module.history.HistoryService;
 import com.luke.fcmanagement.repository.FCResourceRepository;
 import com.luke.fcmanagement.repository.FootballClubMemberRepository;
 import com.luke.fcmanagement.repository.FootballClubRepository;
-import com.luke.fcmanagement.utils.Utils;
-import com.luke.fcmanagement.utils.file_utils.FileChecker;
-import com.luke.fcmanagement.utils.file_utils.FileSaver;
+import com.luke.fcmanagement.utils.JSON;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,10 +36,8 @@ public class FootballClubService implements IFootballClubService {
     private final FootballClubMemberRepository footballClubMemberRepository;
     private final FCResourceRepository fcResourceRepository;
     private final FileSaver fileSaver;
-    private final Utils utils;
-
-    @Value("${file.save.type}")
-    private String saveFileType;
+    private final HistoryService historyService;
+    private final ObjectMapper objectMapper;
 
     @Value("${media.member.path}")
     private String memberPath;
@@ -53,15 +53,18 @@ public class FootballClubService implements IFootballClubService {
 
     @Override
     @Transactional(rollbackFor = Throwable.class)
-    public ApiResponse createFC(CreateFCRequest request) throws JsonProcessingException {
-        ApiResponse response = new ApiResponse();
+    public ApiResponse createFC(CreateFCRequest request) {
+        log.info("REQUEST : body-{}", JSON.stringify(request));
         if (!isValidFC(request, request.getFcResources().getMedia())) {
-            ApiError error = new ApiError();
-            error.setErrorMsg(new ErrorMsg(ErrorCode.VALIDATE_FAIL.getMessage(), null));
-            response.setCode(ErrorCode.VALIDATE_FAIL);
-            response.setStatus(StatusApi.FAIL);
-            return response;
+            throw new BusinessException(ErrorCode.VALIDATE_FAIL);
         }
+        MultipartFile[] media = request.getFcResources().getMedia();
+        if (ArrayUtils.isNotEmpty(media)) {
+            if (!FileUtils.isValidListFile(media)) {
+                throw new BusinessException(ErrorCode.VALIDATE_FAIL);
+            }
+        }
+
         // * save FC
         FootballClubEntity fc = FootballClubEntity.builder()
                 .fcName(request.getFcName())
@@ -73,7 +76,7 @@ public class FootballClubService implements IFootballClubService {
 
         // * save FC Member
         if (Objects.nonNull(request.getFcMembers())) {
-            request.getFcMembers().stream().forEach(e -> {
+            request.getFcMembers().forEach(e -> {
                 FootBallClubMemberEntity member = FootBallClubMemberEntity
                         .builder()
                         .userId(e.getUserId())
@@ -97,7 +100,6 @@ public class FootballClubService implements IFootballClubService {
             });
         }
 
-
         // * save logo FC
         MultipartFile logo = request.getFcResources().getLogo();
         if (Objects.nonNull(logo)) {
@@ -114,40 +116,32 @@ public class FootballClubService implements IFootballClubService {
         }
 
         // * save media FC
-        MultipartFile[] media = request.getFcResources().getMedia();
-        if (Objects.nonNull(media) && media.length > 0) {
-            if (!FileChecker.isValidListFile(media)) {
-                throw new RuntimeException("List resource files invalid");
-            } else {
-                for (MultipartFile file : media) {
-                    String fileName = fcSaved.getFcId() + "_" + file.getOriginalFilename();
-                    String pathSave;
-                    String type;
-                    String desc;
-                    if (FileChecker.isJPG(file)) {
-                        pathSave = fileSaver.saveFile(file, fcImgPath, fileName);
-                        type = FCMediaType.IMAGE.getValue();
-                        desc = FCMediaType.IMAGE.getDisplay();
-                    } else {
-                        pathSave = fileSaver.saveFile(file, fcVideoPath, fileName);
-                        type = FCMediaType.VIDEO.getValue();
-                        desc = FCMediaType.VIDEO.getDisplay();
-                    }
-
-                    FCResourceEntity mediaFC = FCResourceEntity
-                            .builder()
-                            .path(pathSave)
-                            .fcId(fcSaved.getFcId())
-                            .type(type)
-                            .description(desc)
-                            .build();
-                    fcResourceRepository.save(mediaFC);
+        if (ArrayUtils.isNotEmpty(media)) {
+            for (MultipartFile file : media) {
+                String fileName = fcSaved.getFcId() + "_" + file.getOriginalFilename();
+                String pathSave;
+                FCMediaType fcMediaType;
+                if (FileUtils.isJPG(file)) {
+                    pathSave = fileSaver.saveFile(file, fcImgPath, fileName);
+                    fcMediaType = FCMediaType.IMAGE;
+                } else {
+                    pathSave = fileSaver.saveFile(file, fcVideoPath, fileName);
+                    fcMediaType = FCMediaType.VIDEO;
                 }
+
+                FCResourceEntity mediaFC = FCResourceEntity
+                        .builder()
+                        .path(pathSave)
+                        .fcId(fcSaved.getFcId())
+                        .type(fcMediaType.getValue())
+                        .description(fcMediaType.getDisplay())
+                        .build();
+                fcResourceRepository.save(mediaFC);
             }
         }
 
         // * save log
-        utils.saveHisLog(StatusHis.SUCCESS.getStatus(), ActionType.CREATE_FC.getValue());
+        this.historyService.saveHisLog(Status.SUCCESS.getStatus(), ActionType.CREATE_FC.getValue());
 
         ApiBody apiBody = new ApiBody();
         apiBody.put(FieldConstant.MESSAGE, Message.CREATE_FC_SUCCESS);
@@ -155,7 +149,7 @@ public class FootballClubService implements IFootballClubService {
     }
 
     private boolean isValidFC(CreateFCRequest request, MultipartFile[] media) {
-        if (Boolean.TRUE.equals(request.getIsGuest()) && (request.getFcMembers().size() > 0 || media.length > 0))
+        if (Boolean.TRUE.equals(request.getIsGuest()) && (!request.getFcMembers().isEmpty() || media.length > 0))
             return false;
         return true;
     }
