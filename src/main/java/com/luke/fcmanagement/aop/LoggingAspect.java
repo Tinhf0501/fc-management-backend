@@ -1,27 +1,23 @@
 package com.luke.fcmanagement.aop;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.luke.fcmanagement.constants.AppConstants;
-import com.luke.fcmanagement.model.RequestWrapper;
+import com.luke.fcmanagement.model.log.Request;
+import com.luke.fcmanagement.model.log.Response;
 import com.luke.fcmanagement.utils.Utils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.*;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
 import org.slf4j.MDC;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.web.util.ContentCachingResponseWrapper;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 @Aspect
@@ -47,11 +43,10 @@ public class LoggingAspect {
         MDC.put(AppConstants.START_TIME, String.valueOf(System.currentTimeMillis()));
         // * Log start of method execution
         log.info("Method start: " + joinPoint.getSignature().getName());
-        logRequest(request);
-
+        List<Object> reqBody = Arrays.asList(joinPoint.getArgs());
+        logRequest(request, reqBody);
         // * Proceed to method execution and get the result
         Object result = joinPoint.proceed();
-
         HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
                 .getResponse();
         logResponse(result, request, response);
@@ -63,21 +58,18 @@ public class LoggingAspect {
         return result;
     }
 
-
-    private void logRequest(HttpServletRequest request) throws IOException {
+    private void logRequest(HttpServletRequest request, List<Object> reqBody) throws IOException {
         Request requestLog = new Request(
                 request.getMethod(),
                 request.getRequestURI(),
                 getParameters(request),
-                null
+                reqBody
         );
-//        if (!Objects.equals(request.getMethod(), HttpMethod.GET.name())) {
-//            requestLog.setReqBody(mapper.readValue(request.getBody(), Object.class));
-//        }
         log.info("{} send request: {}", Utils.getIpAddress(), mapper.writerWithDefaultPrettyPrinter().writeValueAsString(requestLog));
     }
 
     private void logResponse(Object result, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        System.out.println(response.getStatus());
         Response responseLog = new Response(
                 request.getMethod(),
                 request.getRequestURI(),
@@ -108,25 +100,5 @@ public class LoggingAspect {
             headers.put(str, response.getHeader(str));
         }
         return headers;
-    }
-
-    @Data
-    @AllArgsConstructor
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class Request {
-        private String method;
-        private String path;
-        private Map<String, String> params;
-        private Object reqBody;
-    }
-
-    @Data
-    @AllArgsConstructor
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class Response {
-        private String method;
-        private String path;
-        private Object resBody;
-        private int status;
     }
 }

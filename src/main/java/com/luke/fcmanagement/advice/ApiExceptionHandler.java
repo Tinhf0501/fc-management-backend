@@ -4,6 +4,7 @@ import com.luke.fcmanagement.constants.ErrorCode;
 import com.luke.fcmanagement.model.ApiError;
 import com.luke.fcmanagement.model.ApiResponse;
 import com.luke.fcmanagement.model.ErrorMsg;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
@@ -24,7 +25,8 @@ public class ApiExceptionHandler {
     @ExceptionHandler(Exception.class)
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     public ApiResponse handleAllException(Exception ex, WebRequest request) {
-        ErrorMsg errorMessage = new ErrorMsg(ex.getLocalizedMessage(), null);
+        String msg = StringUtils.isBlank(ex.getLocalizedMessage()) ? ex.toString() : ex.getLocalizedMessage();
+        ErrorMsg errorMessage = new ErrorMsg(msg, null);
         ApiError apiError = new ApiError(errorMessage);
         return ApiResponse.fail(ErrorCode.INTERNAL_ERROR, apiError);
     }
