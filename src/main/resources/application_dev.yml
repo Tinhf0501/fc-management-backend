@@ -25,12 +25,6 @@ spring:
         dialect: org.hibernate.dialect.MySQLDialect
     open-in-view: false
 
-#database:
-#  dump:
-#    target_path: "classpath:/dump/"
-#    absolute_path: "D:\\EXAMPLE\\FC_MANAGEMENT\\BE\\fc-management-backend\\dump\\"
-#  job: 0 52 16 * * ?
-
 media:
   absolute-path: "D:/EXAMPLE/FC_MANAGEMENT/BE/fc-management-backend/upload"
   member-path: "/member/avatar/"
