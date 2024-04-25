@@ -28,10 +28,4 @@ public class FootballClubController {
     public ResponseEntity<ApiResponse> create(@Valid CreateFCRequest request, BindingResult bindingResult) throws BusinessException, BindException {
         return ResponseEntity.ok(footballClubService.createFC(request, bindingResult));
     }
-
-    @GetMapping("/test")
-    public ResponseEntity<ApiResponse> test(
-    ) {
-        return ResponseEntity.ok(ApiResponse.ok(null));
-    }
 }
