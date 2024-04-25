@@ -33,12 +33,10 @@ spring:
 
 media:
   absolute-path: "D:/EXAMPLE/FC_MANAGEMENT/BE/fc-management-backend/upload"
-  member:
-    path: "/member/avatar/"
-  fc:
-    img-path: "/fc/imgs/"
-    logo-path: "/fc/logo/"
-    videos-path: "/fc/videos/"
+  member-path: "/member/avatar/"
+  fc-img-path: "/fc/imgs/"
+  fc-logo-path: "/fc/logo/"
+  fc-video-path: "/fc/videos/"
 file:
   save:
     type: "LOCAL"
