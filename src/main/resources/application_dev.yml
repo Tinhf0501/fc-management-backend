@@ -28,12 +28,8 @@ spring:
     default-property-inclusion: always
 media:
   absolute-path: "D:\\edu\\fc-management\\fc-management-backend\\upload"
-  member:
-    path: "/member/avatar/"
-  fc:
-    img-path: "/fc/imgs/"
-    logo-path: "/fc/logo/"
-    videos-path: "/fc/videos/"
+  img-path: "/image/"
+  video-path: "/video/"
 file:
   save:
     type: "LOCAL"

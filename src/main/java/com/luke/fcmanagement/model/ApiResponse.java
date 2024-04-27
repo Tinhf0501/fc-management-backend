@@ -3,7 +3,10 @@ package com.luke.fcmanagement.model;
 import com.luke.fcmanagement.constants.AppConstants;
 import com.luke.fcmanagement.constants.ErrorCode;
 import com.luke.fcmanagement.constants.Status;
-import lombok.*;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.slf4j.MDC;
 
@@ -33,7 +36,6 @@ public class ApiResponse {
         apiResponse.setApiError(apiError);
         return apiResponse;
     }
-
     public static ApiResponse fail(ErrorCode code) {
         ApiError apiError = new ApiError(code.getMessage(), null);
         return ApiResponse.fail(code, apiError);

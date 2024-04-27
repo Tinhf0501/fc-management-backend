@@ -1,5 +1,6 @@
-package com.luke.fcmanagement.entity;
+package com.luke.fcmanagement.module.football_club;
 
+import com.luke.fcmanagement.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;

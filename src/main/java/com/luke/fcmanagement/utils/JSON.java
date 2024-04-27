@@ -6,7 +6,6 @@ import org.apache.commons.lang3.StringUtils;
 
 @UtilityClass
 public class JSON {
-
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     public String stringify(Object object) {

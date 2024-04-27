@@ -4,12 +4,11 @@ import com.luke.fcmanagement.constants.ErrorCode;
 import lombok.Getter;
 
 public class BusinessException extends RuntimeException {
-
     @Getter
     private ErrorCode errorCode;
 
-    public BusinessException(String message) {
-        super(message);
+    public BusinessException(String msg) {
+        super(msg);
     }
 
     public BusinessException(ErrorCode errorCode) {

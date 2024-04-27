@@ -13,7 +13,6 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 @Service
 @RequiredArgsConstructor
 public class HistoryService {
-
     private final HisLogRepository hisLogRepository;
 
     public void saveHisLog(String status, String actionType) {

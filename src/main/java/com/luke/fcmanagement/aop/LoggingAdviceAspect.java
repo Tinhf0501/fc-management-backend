@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @RequiredArgsConstructor
 public class LoggingAdviceAspect {
-
     @Before("@annotation(org.springframework.web.bind.annotation.ExceptionHandler) && args(throwable,..)")
     public void logErrorException(Throwable throwable) {
         log.error(throwable.getMessage(), throwable);

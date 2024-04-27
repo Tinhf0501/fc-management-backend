@@ -8,20 +8,11 @@ import lombok.Getter;
 @AllArgsConstructor
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum FCMediaType {
-    LOGO("LOGO", "Logo FC"),
-    IMAGE("IMAGE", "Image FC"),
-    VIDEO("VIDEO", "Video FC"),
-    UNKNOWN("UNKNOWN", "Không xác định");
+    IMAGE("IMAGE", "Image", "media.img-path"),
+    VIDEO("VIDEO", "Video", "media.video-path"),
+    UNKNOWN("UNKNOWN", "Không xác định", "");
 
-    private String value;
-    private String display;
-
-    public static FCMediaType getType(String value) {
-        for (FCMediaType entity : values()) {
-            if (entity.getValue().equals(value)) {
-                return entity;
-            }
-        }
-        return UNKNOWN;
-    }
+    private final String value;
+    private final String display;
+    private final String folderEnvKey;
 }

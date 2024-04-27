@@ -25,24 +25,22 @@ import java.util.UUID;
 @Slf4j
 @RequiredArgsConstructor
 public class HttpLoggingFilter extends OncePerRequestFilter {
-
     private final ObjectMapper objectMapper;
-
     @Override
-    protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
-        final String contentType = httpServletRequest.getContentType();
-        final ContentCachingResponseWrapper resp = new ContentCachingResponseWrapper(httpServletResponse);
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        final String contentType = request.getContentType();
+        final ContentCachingResponseWrapper resp = new ContentCachingResponseWrapper(response);
         try {
-            final String traceId = this.generateTraceId(httpServletRequest);
+            final String traceId = this.generateTraceId(request);
             MDC.put(AppConstants.TRACE_ID_KEY, traceId);
-            MDC.put("startTime", String.valueOf(System.currentTimeMillis()));
-            if (Objects.isNull(contentType) || !contentType.contains("multipart/form-data")) {
-                final RequestWrapper requestWrapper = new RequestWrapper(httpServletRequest);
+            MDC.put(AppConstants.START_TIME, String.valueOf(System.currentTimeMillis()));
+            if (Objects.isNull(contentType) || !contentType.contains(AppConstants.CONTENT_TYPE_MULTI_PART)) {
+                final RequestWrapper requestWrapper = new RequestWrapper(request);
                 final Object requestBody = this.getRequestBody(requestWrapper);
                 this.preHandle(requestBody);
                 filterChain.doFilter(requestWrapper, resp);
             } else {
-                filterChain.doFilter(httpServletRequest, resp);
+                filterChain.doFilter(request, resp);
             }
         } finally {
             final Object responseBody = this.getResponseBody(resp);
@@ -51,7 +49,6 @@ public class HttpLoggingFilter extends OncePerRequestFilter {
             MDC.clear();
         }
     }
-
     private String generateTraceId(HttpServletRequest request) {
         String traceId = request.getHeader(AppConstants.TRACE_ID_KEY);
         if (StringUtils.isNoneBlank(traceId)) {

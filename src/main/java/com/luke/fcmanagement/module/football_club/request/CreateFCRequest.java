@@ -1,4 +1,4 @@
-package com.luke.fcmanagement.module.football_club.dto.request;
+package com.luke.fcmanagement.module.football_club.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.NotBlank;

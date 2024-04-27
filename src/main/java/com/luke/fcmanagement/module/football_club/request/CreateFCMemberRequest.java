@@ -1,6 +1,8 @@
-package com.luke.fcmanagement.module.football_club.dto.request;
+package com.luke.fcmanagement.module.football_club.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.luke.fcmanagement.constants.FCStatus;
+import com.luke.fcmanagement.module.member.MemberEntity;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -44,4 +46,20 @@ public class CreateFCMemberRequest {
 
     @JsonIgnore
     private MultipartFile avatar;
+
+    public MemberEntity toEntity(Long fcId, FCStatus fcStatus) {
+        return MemberEntity
+                .builder()
+                .userId(this.getUserId())
+                .fcId(fcId)
+                .nameShirt(this.getNameShirt())
+                .numberShirt(this.getNumberShirt())
+                .fullName(this.getFullName())
+                .phoneNumber(this.getPhoneNumber())
+                .address(this.getAddress())
+                .description(this.getDescription())
+                .position(String.join(",", this.getPosition()))
+                .status(fcStatus.getValue())
+                .build();
+    }
 }

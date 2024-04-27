@@ -1,6 +1,7 @@
-package com.luke.fcmanagement.entity;
+package com.luke.fcmanagement.module.member;
 
 
+import com.luke.fcmanagement.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
@@ -12,7 +13,7 @@ import org.hibernate.annotations.GenericGenerator;
 @NoArgsConstructor
 @Entity(name = "TB_FOOTBALL_CLUB_MEMBER")
 @Builder
-public class FootBallClubMemberEntity extends BaseEntity {
+public class MemberEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native")
