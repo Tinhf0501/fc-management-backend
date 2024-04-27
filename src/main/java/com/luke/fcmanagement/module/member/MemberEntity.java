@@ -43,7 +43,7 @@ public class MemberEntity extends BaseEntity {
     private String description;
 
     @Column(name = "STATUS", nullable = false)
-    private String status;
+    private Integer status;
 
     @Column(name = "FULL_NAME", nullable = false)
     private String fullName;

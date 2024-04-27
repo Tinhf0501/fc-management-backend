@@ -34,7 +34,7 @@ public class ResourceServiceImpl implements IResourceService {
         }
         for (MultipartFile resource : resources) {
             FCMediaType fcMediaType;
-            if (FileUtils.isJPG(resource)) {
+            if (FileUtils.isImage(resource)) {
                 fcMediaType = FCMediaType.IMAGE;
             } else {
                 fcMediaType = FCMediaType.VIDEO;

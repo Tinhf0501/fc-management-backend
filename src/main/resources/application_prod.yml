@@ -16,9 +16,6 @@ spring:
     hibernate:
       ddl-auto: none
     show-sql: false
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.MySQLDialect
   jackson:
     default-property-inclusion: non_null
 media:
@@ -26,3 +23,4 @@ media:
     active: local
     local:
       absolute-path: ""
+      host: https://localhost:8080/api

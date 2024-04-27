@@ -29,7 +29,7 @@ public class LocalFileService implements IFileService {
                 f.mkdirs();
             }
             file.transferTo(f);
-            return pathSave;
+            return this.localSaverFileConfig.getHost() + folderPath + fileName.replace(File.separator, "/");
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }

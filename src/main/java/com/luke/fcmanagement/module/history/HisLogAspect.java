@@ -20,11 +20,11 @@ public class HisLogAspect {
 
     @AfterReturning(pointcut = "@annotation(captureHistory)")
     public void saveHisSuccess(CaptureHistory captureHistory) {
-        historyService.saveHisLog(Status.SUCCESS.getStatus(), captureHistory.value().getValue());
+        historyService.saveHisLog(Status.SUCCESS.getCode(), captureHistory.value().getValue());
     }
 
     @AfterThrowing(pointcut = "@annotation(captureHistory)")
     public void saveHisFail(CaptureHistory captureHistory) {
-        historyService.saveHisLog(Status.FAIL.getStatus(), captureHistory.value().getValue());
+        historyService.saveHisLog(Status.FAIL.getCode(), captureHistory.value().getValue());
     }
 }

@@ -14,6 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.MDC;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.ContentCachingResponseWrapper;
 
@@ -26,7 +27,18 @@ import java.util.UUID;
 @Slf4j
 @RequiredArgsConstructor
 public class LoggingFilter extends OncePerRequestFilter {
+
     private final ObjectMapper objectMapper;
+    private final LoggingProperties loggingProperties;
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        final String requestURI = request.getRequestURI();
+        return this.loggingProperties.getIgnoresPath().stream().anyMatch(path -> {
+            return new AntPathMatcher().match(path, requestURI);
+        });
+    }
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         final String contentType = request.getContentType();

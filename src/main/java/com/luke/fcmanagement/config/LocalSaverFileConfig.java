@@ -13,4 +13,5 @@ import org.springframework.context.annotation.Configuration;
 @Getter
 public class LocalSaverFileConfig {
     private String absolutePath;
+    private String host;
 }
