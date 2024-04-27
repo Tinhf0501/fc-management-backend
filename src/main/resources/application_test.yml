@@ -21,3 +21,8 @@ spring:
         dialect: org.hibernate.dialect.MySQLDialect
   jackson:
     default-property-inclusion: always
+media:
+  saver:
+    active: local
+    local:
+      absolute-path: ""

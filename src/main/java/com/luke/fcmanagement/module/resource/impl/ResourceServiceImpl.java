@@ -1,8 +1,8 @@
 package com.luke.fcmanagement.module.resource.impl;
 
 import com.luke.fcmanagement.constants.ErrorCode;
-import com.luke.fcmanagement.constants.FCMediaType;
-import com.luke.fcmanagement.entity.FCResourceEntity;
+import com.luke.fcmanagement.module.resource.constant.FCMediaType;
+import com.luke.fcmanagement.module.resource.ResourceEntity;
 import com.luke.fcmanagement.exception.BusinessException;
 import com.luke.fcmanagement.module.resource.file.FileUtils;
 import com.luke.fcmanagement.module.resource.file.IFileService;
@@ -47,7 +47,7 @@ public class ResourceServiceImpl implements IResourceService {
         if (Objects.isNull(resource) || Objects.isNull(fcMediaType)) return;
         log.info("save resource {} name: {}", fcMediaType.getDisplay(), fileName);
         String pathSave = this.fileService.saveFile(resource, fcMediaType, fileName);
-        FCResourceEntity logoFC = FCResourceEntity
+        ResourceEntity logoFC = ResourceEntity
                 .builder()
                 .path(pathSave)
                 .fcId(fcId)

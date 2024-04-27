@@ -27,9 +27,7 @@ spring:
   jackson:
     default-property-inclusion: always
 media:
-  absolute-path: "D:\\edu\\fc-management\\fc-management-backend\\upload"
-  img-path: "/image/"
-  video-path: "/video/"
-file:
-  save:
-    type: "LOCAL"
+  saver:
+    active: local
+    local:
+      absolute-path: "D:\\edu\\fc-management\\fc-management-backend\\upload"

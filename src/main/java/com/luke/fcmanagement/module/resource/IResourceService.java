@@ -1,6 +1,6 @@
 package com.luke.fcmanagement.module.resource;
 
-import com.luke.fcmanagement.constants.FCMediaType;
+import com.luke.fcmanagement.module.resource.constant.FCMediaType;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;

@@ -12,6 +12,6 @@ public enum Status {
     FAIL("FAIL", "Tháo tác thất bại"),
     UNKNOWN("UNKNOWN", "Không xác định");
 
-    private final String status;
-    private final String desc;
+    private final String code;
+    private final String value;
 }

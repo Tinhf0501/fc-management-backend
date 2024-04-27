@@ -1,4 +1,4 @@
-package com.luke.fcmanagement.model;
+package com.luke.fcmanagement.module.logging.model;
 
 import jakarta.servlet.ReadListener;
 import jakarta.servlet.ServletInputStream;

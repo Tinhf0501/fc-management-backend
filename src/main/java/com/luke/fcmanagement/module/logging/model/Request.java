@@ -1,4 +1,4 @@
-package com.luke.fcmanagement.model.log;
+package com.luke.fcmanagement.module.logging.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

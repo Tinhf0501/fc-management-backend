@@ -14,10 +14,15 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
-      ddl-auto: update
-    show-sql: true
+      ddl-auto: none
+    show-sql: false
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
   jackson:
     default-property-inclusion: non_null
+media:
+  saver:
+    active: local
+    local:
+      absolute-path: ""

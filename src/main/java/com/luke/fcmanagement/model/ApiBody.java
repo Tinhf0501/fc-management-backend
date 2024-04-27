@@ -1,11 +1,13 @@
 package com.luke.fcmanagement.model;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.luke.fcmanagement.constants.FieldConstant;
+import com.luke.fcmanagement.constants.Message;
 
 import java.util.HashMap;
 
-@Data
-@NoArgsConstructor
 public class ApiBody extends HashMap<String, Object> {
+
+    public void setMessage(Message message) {
+        this.put(FieldConstant.MESSAGE, message);
+    }
 }

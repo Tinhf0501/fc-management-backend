@@ -1,4 +1,4 @@
-package com.luke.fcmanagement.aop;
+package com.luke.fcmanagement.module.logging;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class LoggingAdviceAspect {
+public class LoggingAspect {
     @Before("@annotation(org.springframework.web.bind.annotation.ExceptionHandler) && args(throwable,..)")
     public void logErrorException(Throwable throwable) {
         log.error(throwable.getMessage(), throwable);

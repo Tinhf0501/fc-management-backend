@@ -1,8 +1,8 @@
-package com.luke.fcmanagement.filter;
+package com.luke.fcmanagement.module.logging;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.luke.fcmanagement.constants.AppConstants;
-import com.luke.fcmanagement.model.RequestWrapper;
+import com.luke.fcmanagement.module.logging.model.RequestWrapper;
 import com.luke.fcmanagement.utils.JSON;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.MDC;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.ContentCachingResponseWrapper;
@@ -24,7 +25,7 @@ import java.util.UUID;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class HttpLoggingFilter extends OncePerRequestFilter {
+public class LoggingFilter extends OncePerRequestFilter {
     private final ObjectMapper objectMapper;
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -34,7 +35,7 @@ public class HttpLoggingFilter extends OncePerRequestFilter {
             final String traceId = this.generateTraceId(request);
             MDC.put(AppConstants.TRACE_ID_KEY, traceId);
             MDC.put(AppConstants.START_TIME, String.valueOf(System.currentTimeMillis()));
-            if (Objects.isNull(contentType) || !contentType.contains(AppConstants.CONTENT_TYPE_MULTI_PART)) {
+            if (Objects.isNull(contentType) || !contentType.contains(MediaType.MULTIPART_FORM_DATA_VALUE)) {
                 final RequestWrapper requestWrapper = new RequestWrapper(request);
                 final Object requestBody = this.getRequestBody(requestWrapper);
                 this.preHandle(requestBody);

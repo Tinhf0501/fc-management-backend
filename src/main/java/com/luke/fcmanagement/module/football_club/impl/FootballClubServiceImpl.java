@@ -11,20 +11,16 @@ import com.luke.fcmanagement.module.football_club.request.CreateFCRequest;
 import com.luke.fcmanagement.module.football_club.request.CreateFCResourceRequest;
 import com.luke.fcmanagement.module.member.IMemberService;
 import com.luke.fcmanagement.module.resource.IResourceService;
+import com.luke.fcmanagement.module.resource.constant.FCMediaType;
 import com.luke.fcmanagement.utils.JSON;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -73,7 +69,7 @@ public class FootballClubServiceImpl implements IFootballClubService {
                 });
 
         ApiBody apiBody = new ApiBody();
-        apiBody.put(FieldConstant.MESSAGE, Message.CREATE_FC_SUCCESS);
+        apiBody.setMessage(Message.CREATE_FC_SUCCESS);
         return ApiResponse.ok(apiBody);
     }
 

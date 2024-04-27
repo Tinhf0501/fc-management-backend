@@ -1,6 +1,6 @@
 package com.luke.fcmanagement.module.member.impl;
 
-import com.luke.fcmanagement.constants.FCMediaType;
+import com.luke.fcmanagement.module.resource.constant.FCMediaType;
 import com.luke.fcmanagement.constants.FCStatus;
 import com.luke.fcmanagement.module.member.MemberEntity;
 import com.luke.fcmanagement.module.resource.file.IFileService;

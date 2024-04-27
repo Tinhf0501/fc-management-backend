@@ -7,4 +7,6 @@ spring:
   profiles:
     active:
       - "dev"
-# test
+media:
+  img-path: "/image/"
+  video-path: "/video/"
