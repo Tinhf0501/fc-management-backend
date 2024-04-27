@@ -12,6 +12,7 @@ import com.luke.fcmanagement.module.football_club.request.CreateFCResourceReques
 import com.luke.fcmanagement.module.member.IMemberService;
 import com.luke.fcmanagement.module.resource.IResourceService;
 import com.luke.fcmanagement.module.resource.constant.FCMediaType;
+
 import com.luke.fcmanagement.utils.JSON;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +23,7 @@ import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 
 import java.util.Optional;
+
 
 @Service
 @RequiredArgsConstructor
@@ -39,6 +41,7 @@ public class FootballClubServiceImpl implements IFootballClubService {
         if (bindingResult.hasErrors()) {
             throw new BindException(bindingResult);
         }
+
         if (this.isValidGuestFC(request)) {
             throw new BusinessException(ErrorCode.VALIDATE_FAIL);
         }

@@ -3,7 +3,6 @@ package com.luke.fcmanagement.model;
 import com.luke.fcmanagement.constants.AppConstants;
 import com.luke.fcmanagement.constants.ErrorCode;
 import com.luke.fcmanagement.constants.Status;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
