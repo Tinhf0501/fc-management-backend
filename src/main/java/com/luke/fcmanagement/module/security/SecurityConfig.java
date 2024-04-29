@@ -1,4 +1,4 @@
-package com.luke.fcmanagement.security;
+package com.luke.fcmanagement.module.security;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -14,18 +14,13 @@ import java.util.Objects;
 
 @Configuration
 public class SecurityConfig {
-    @Value("${frontend.url}")
-    public String feUrl;
+    @Value("${security.cors.url}")
+    public List<String> corsUrl;
 
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
-        List<String> urls;
-        if (Objects.nonNull(feUrl))
-            urls = List.of(feUrl);
-        else
-            urls = Collections.emptyList();
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(urls);
+        configuration.setAllowedOrigins(corsUrl);
         configuration.setAllowCredentials(true);
         configuration.setAllowedHeaders(
                 Arrays.asList(

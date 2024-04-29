@@ -28,9 +28,10 @@ media:
     active: local
     local:
       absolute-path: "D:\\edu\\fc-management\\fc-management-backend\\upload"
-      host: http://localhost:${server.port}/${server.servlet.context-path}/resources
+      host: http://localhost:${server.port}${server.servlet.context-path}/resources
 logging:
   ignores-path:
     - "/api/resources/**"
-front-end:
-  url: http://localhost:4200
+security:
+  cors:
+    url: http://localhost:4200
