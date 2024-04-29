@@ -3,8 +3,9 @@ package com.luke.fcmanagement.exception;
 import com.luke.fcmanagement.constants.ErrorCode;
 import lombok.Getter;
 
-public class BusinessException extends Exception {
-    @Getter
+@Getter
+public class BusinessException extends RuntimeException {
+
     private ErrorCode errorCode;
 
     public BusinessException(String msg) {
@@ -12,7 +13,7 @@ public class BusinessException extends Exception {
     }
 
     public BusinessException(ErrorCode errorCode) {
-        super(errorCode.getMessage());
+        this(errorCode.getCode() + " - " + errorCode.getMessage());
         this.errorCode = errorCode;
     }
 }

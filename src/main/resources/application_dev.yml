@@ -14,26 +14,21 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/fc_management?createDatabaseIfNotExist=true
     username: root
-    password: Tinh0501@@123
+    password: NguyenVanSuong@2001
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: false
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.MySQLDialect
     open-in-view: false
-
+  jackson:
+    default-property-inclusion: always
 media:
-  absolute-path: "D:/EXAMPLE/FC_MANAGEMENT/BE/fc-management-backend/upload"
-  member-path: "/member/avatar/"
-  fc-img-path: "/fc/imgs/"
-  fc-logo-path: "/fc/logo/"
-  fc-video-path: "/fc/videos/"
-file:
-  save:
-    type: "LOCAL"
-
-build:
-  version: "1.0"
+  saver:
+    active: local
+    local:
+      absolute-path: "D:\\edu\\fc-management\\fc-management-backend\\upload"
+      host: http://localhost:${server.port}/${server.servlet.context-path}/resources
+logging:
+  ignores-path:
+    - "/api/resources/**"
