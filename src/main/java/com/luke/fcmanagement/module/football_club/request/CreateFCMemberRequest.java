@@ -3,6 +3,8 @@ package com.luke.fcmanagement.module.football_club.request;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.luke.fcmanagement.constants.FCStatus;
 import com.luke.fcmanagement.module.member.MemberEntity;
+import com.luke.fcmanagement.module.resource.annotation.ResourceType;
+import com.luke.fcmanagement.module.resource.constant.MediaType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -45,6 +47,7 @@ public class CreateFCMemberRequest {
     private List<String> position;
 
     @JsonIgnore
+    @ResourceType(MediaType.IMAGE)
     private MultipartFile avatar;
 
     public MemberEntity toEntity(Long fcId, FCStatus fcStatus) {

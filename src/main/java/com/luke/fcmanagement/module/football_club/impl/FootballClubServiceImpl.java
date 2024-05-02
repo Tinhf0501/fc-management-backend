@@ -1,13 +1,17 @@
 package com.luke.fcmanagement.module.football_club.impl;
 
+import com.luke.fcmanagement.constants.ErrorCode;
 import com.luke.fcmanagement.constants.FCStatus;
 import com.luke.fcmanagement.constants.Message;
+import com.luke.fcmanagement.exception.BusinessException;
+import com.luke.fcmanagement.exception.RecordNotFoundException;
 import com.luke.fcmanagement.model.ApiBody;
 import com.luke.fcmanagement.model.ApiResponse;
 import com.luke.fcmanagement.module.football_club.FootballClubEntity;
 import com.luke.fcmanagement.module.football_club.IFootballClubRepository;
 import com.luke.fcmanagement.module.football_club.IFootballClubService;
 import com.luke.fcmanagement.module.football_club.request.CreateFCRequest;
+import com.luke.fcmanagement.module.football_club.request.UpdateFCRequest;
 import com.luke.fcmanagement.module.member.IMemberService;
 import com.luke.fcmanagement.module.resource.IResourceService;
 import com.luke.fcmanagement.module.resource.constant.MediaType;
@@ -59,5 +63,22 @@ public class FootballClubServiceImpl implements IFootballClubService {
         ApiBody apiBody = new ApiBody();
         apiBody.setMessage(Message.CREATE_FC_SUCCESS);
         return ApiResponse.ok(apiBody);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Throwable.class)
+    public ApiResponse updateFC(UpdateFCRequest request, BindingResult bindingResult) throws BusinessException, BindException, RecordNotFoundException {
+        log.info("API : {} send REQUEST : body-{}", Utils.getRequestUri(), JSON.stringify(request));
+        if (bindingResult.hasErrors()) {
+            throw new BindException(bindingResult);
+        }
+        FootballClubEntity entity = footballClubRepository.findById(request.getFcId()).orElseThrow(() -> new RecordNotFoundException(ErrorCode.NOT_FOUND_RECORD));
+        entity.setFcName(request.getFcName());
+        entity.setDescription(request.getDescription());
+        footballClubRepository.save(entity);
+
+
+
+        return null;
     }
 }

@@ -1,8 +1,10 @@
 package com.luke.fcmanagement.module.football_club;
 
 import com.luke.fcmanagement.exception.BusinessException;
+import com.luke.fcmanagement.exception.RecordNotFoundException;
 import com.luke.fcmanagement.model.ApiResponse;
 import com.luke.fcmanagement.module.football_club.request.CreateFCRequest;
+import com.luke.fcmanagement.module.football_club.request.UpdateFCRequest;
 import com.luke.fcmanagement.module.history.annotation.CaptureHistory;
 import com.luke.fcmanagement.module.history.constant.ActionType;
 import jakarta.validation.Valid;
@@ -11,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,5 +28,11 @@ public class FootballClubController {
     @PostMapping
     public ApiResponse create(@Valid CreateFCRequest request, BindingResult bindingResult) throws BusinessException, BindException {
         return footballClubService.createFC(request, bindingResult);
+    }
+
+    @CaptureHistory(ActionType.UPDATE_FC)
+    @PutMapping
+    public ApiResponse update(@Valid UpdateFCRequest request, BindingResult bindingResult) throws BusinessException, BindException, RecordNotFoundException {
+        return footballClubService.updateFC(request, bindingResult);
     }
 }
