@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
-public enum FCMediaType {
+public enum MediaType {
     IMAGE("IMAGE", "Image", "media.img-path"),
     VIDEO("VIDEO", "Video", "media.video-path"),
     UNKNOWN("UNKNOWN", "Không xác định", "");
