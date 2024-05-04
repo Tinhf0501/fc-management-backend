@@ -6,6 +6,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 @ToString
@@ -36,9 +38,6 @@ public class MemberEntity extends BaseEntity {
     @Column(name = "POSITION", nullable = false)
     private String position;
 
-    @Column(name = "AVATAR", length = 2000)
-    private String avatar;
-
     @Column(name = "DESCRIPTION", length = 2000)
     private String description;
 
@@ -54,6 +53,6 @@ public class MemberEntity extends BaseEntity {
     @Column(name = "ADDRESS", length = 2000)
     private String address;
 
-    @Column(name = "DATE_OF_BIRTHDAY", length = 1000)
-    private String dateOfBirthday;
+    @Column(name = "DATE_OF_BIRTHDAY")
+    private LocalDate dateOfBirthday;
 }

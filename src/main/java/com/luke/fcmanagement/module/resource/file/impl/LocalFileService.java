@@ -34,4 +34,15 @@ public class LocalFileService implements IFileService {
             throw new RuntimeException(ex);
         }
     }
+
+    @Override
+    public void deleteFile(String path) {
+        try {
+            final File f = new File(path);
+            if (f.exists())
+                f.delete();
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
 }

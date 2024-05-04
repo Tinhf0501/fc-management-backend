@@ -14,6 +14,7 @@ import com.luke.fcmanagement.module.football_club.request.UpdateFCRequest;
 import com.luke.fcmanagement.module.member.IMemberService;
 import com.luke.fcmanagement.module.resource.IResourceService;
 import com.luke.fcmanagement.module.resource.constant.MediaType;
+import com.luke.fcmanagement.module.resource.constant.TargetType;
 import com.luke.fcmanagement.utils.JSON;
 import com.luke.fcmanagement.utils.Utils;
 import lombok.RequiredArgsConstructor;
@@ -54,10 +55,10 @@ public class FootballClubServiceImpl implements IFootballClubService {
 
         // * save logo FC
         Optional.ofNullable(request.getLogo())
-                .ifPresent(logo -> this.resourceService.saveResource(logo, fcSaved.getFcId(), MediaType.IMAGE));
+                .ifPresent(logo -> this.resourceService.saveResource(logo, fcSaved.getFcId(), MediaType.IMAGE, TargetType.FC));
 
         // * save media FC
-        Optional.ofNullable(request.getMedia()).ifPresent(medias -> this.resourceService.saveBathResource(medias, fcSaved.getFcId()));
+        Optional.ofNullable(request.getMedia()).ifPresent(medias -> this.resourceService.saveBathResource(medias, fcSaved.getFcId(), TargetType.FC));
 
         ApiBody apiBody = new ApiBody();
         apiBody.setMessage(Message.CREATE_FC_SUCCESS);
@@ -74,9 +75,21 @@ public class FootballClubServiceImpl implements IFootballClubService {
         FootballClubEntity entity = footballClubRepository.findById(request.getFcId()).orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_RECORD));
         entity.setFcName(request.getFcName());
         entity.setDescription(request.getDescription());
-        footballClubRepository.save(entity);
+        FootballClubEntity fcSaved = footballClubRepository.save(entity);
 
+        // * save FC Member
+        this.memberService.saveFcMember(request.getFcMembers(), fcSaved.getFcId());
 
+        // update fc member
+        this.memberService.updateMember(request.getFcMemberUpdate(), fcSaved.getFcId());
+
+        // * save logo FC
+        Optional.ofNullable(request.getLogo())
+                .ifPresent(logo -> this.resourceService.saveResource(logo, fcSaved.getFcId(), MediaType.IMAGE, TargetType.FC));
+
+        Optional.ofNullable(request.getFcMemberIdsDelete()).ifPresent(memberId -> this.memberService.batchDeleteFcMemberById(request.getFcMemberIdsDelete()));
+
+        Optional.ofNullable(request.getPathMediaIdsDelete()).ifPresent(memberId -> this.resourceService.batchDeleteResourceById(request.getPathMediaIdsDelete()));
 
         return null;
     }

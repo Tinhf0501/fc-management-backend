@@ -15,4 +15,13 @@ public enum FCStatus {
 
     private final int value;
     private final String desc;
+
+    public static FCStatus getStatus(int value) {
+        for (FCStatus status : values()) {
+            if (status.getValue() == value) {
+                return status;
+            }
+        }
+        return UNKNOWN;
+    }
 }
