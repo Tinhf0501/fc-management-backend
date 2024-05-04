@@ -1,7 +1,6 @@
 package com.luke.fcmanagement.module.football_club;
 
 import com.luke.fcmanagement.exception.BusinessException;
-import com.luke.fcmanagement.exception.RecordNotFoundException;
 import com.luke.fcmanagement.model.ApiResponse;
 import com.luke.fcmanagement.module.football_club.request.CreateFCRequest;
 import com.luke.fcmanagement.module.football_club.request.UpdateFCRequest;
@@ -32,7 +31,7 @@ public class FootballClubController {
 
     @CaptureHistory(ActionType.UPDATE_FC)
     @PutMapping
-    public ApiResponse update(@Valid UpdateFCRequest request, BindingResult bindingResult) throws BusinessException, BindException, RecordNotFoundException {
+    public ApiResponse update(@Valid UpdateFCRequest request, BindingResult bindingResult) throws BusinessException, BindException {
         return footballClubService.updateFC(request, bindingResult);
     }
 }

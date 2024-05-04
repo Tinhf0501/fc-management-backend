@@ -29,11 +29,11 @@ public class CreateFCRequest {
     private List<CreateFCMemberRequest> fcMembers;
 
     @JsonIgnore
-    @ResourceType(MediaType.IMAGE)
+    @ResourceType(value = MediaType.IMAGE, message = "File logo phải là file .png hoặc .jpg(.jpeg)")
     private MultipartFile logo;
 
     @JsonIgnore
     @Size(max = 10, message = "Số lượng file tối đa được tải lên là 10.")
-    @BatchResourceType
+    @BatchResourceType(message = "File media phải là file .png, .jpg(.jpeg), .mp4")
     private List<MultipartFile> media;
 }

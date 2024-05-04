@@ -11,7 +11,7 @@ import java.lang.annotation.*;
 @Constraint(validatedBy = ResourceTypeValidator.class)
 @Documented
 public @interface ResourceType {
-    MediaType value() default MediaType.UNKNOWN;
+    MediaType value();
 
     String message() default "Invalid file type";
 

@@ -4,7 +4,6 @@ import com.luke.fcmanagement.constants.ErrorCode;
 import com.luke.fcmanagement.constants.FCStatus;
 import com.luke.fcmanagement.constants.Message;
 import com.luke.fcmanagement.exception.BusinessException;
-import com.luke.fcmanagement.exception.RecordNotFoundException;
 import com.luke.fcmanagement.model.ApiBody;
 import com.luke.fcmanagement.model.ApiResponse;
 import com.luke.fcmanagement.module.football_club.FootballClubEntity;
@@ -67,12 +66,12 @@ public class FootballClubServiceImpl implements IFootballClubService {
 
     @Override
     @Transactional(rollbackFor = Throwable.class)
-    public ApiResponse updateFC(UpdateFCRequest request, BindingResult bindingResult) throws BusinessException, BindException, RecordNotFoundException {
+    public ApiResponse updateFC(UpdateFCRequest request, BindingResult bindingResult) throws BusinessException, BindException {
         log.info("API : {} send REQUEST : body-{}", Utils.getRequestUri(), JSON.stringify(request));
         if (bindingResult.hasErrors()) {
             throw new BindException(bindingResult);
         }
-        FootballClubEntity entity = footballClubRepository.findById(request.getFcId()).orElseThrow(() -> new RecordNotFoundException(ErrorCode.NOT_FOUND_RECORD));
+        FootballClubEntity entity = footballClubRepository.findById(request.getFcId()).orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_RECORD));
         entity.setFcName(request.getFcName());
         entity.setDescription(request.getDescription());
         footballClubRepository.save(entity);
