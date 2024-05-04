@@ -1,9 +1,9 @@
 package com.luke.fcmanagement.module.resource.file;
 
-import com.luke.fcmanagement.module.resource.constant.FCMediaType;
+import com.luke.fcmanagement.module.resource.constant.MediaType;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface IFileService {
-    String saveFile(MultipartFile file, FCMediaType mediaType, String fileName);
+    String saveFile(MultipartFile file, MediaType mediaType, String fileName);
 
 }

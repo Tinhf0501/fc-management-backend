@@ -29,7 +29,4 @@ public class FootballClubEntity extends BaseEntity {
 
     @Column(name = "STATUS", nullable = false)
     private Integer status;
-
-    @Column(name = "IS_GUEST")
-    private Boolean isGuest;
 }

@@ -32,17 +32,16 @@ public class LoggingFilter extends OncePerRequestFilter {
     private final LoggingProperties loggingProperties;
 
     @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+    protected boolean shouldNotFilter(HttpServletRequest request) {
         final String requestURI = request.getRequestURI();
-        return this.loggingProperties.getIgnoresPath().stream().anyMatch(path -> {
-            return new AntPathMatcher().match(path, requestURI);
-        });
+        return this.loggingProperties.getIgnoresPath().stream().anyMatch(path -> new AntPathMatcher().match(path, requestURI));
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         final String contentType = request.getContentType();
         final ContentCachingResponseWrapper resp = new ContentCachingResponseWrapper(response);
+        String requestUri = null;
         try {
             final String traceId = this.generateTraceId(request);
             MDC.put(AppConstants.TRACE_ID_KEY, traceId);
@@ -50,18 +49,20 @@ public class LoggingFilter extends OncePerRequestFilter {
             if (Objects.isNull(contentType) || !contentType.contains(MediaType.MULTIPART_FORM_DATA_VALUE)) {
                 final RequestWrapper requestWrapper = new RequestWrapper(request);
                 final Object requestBody = this.getRequestBody(requestWrapper);
-                this.preHandle(requestBody);
+                requestUri = requestWrapper.getRequestURI();
+                this.preHandle(requestBody, requestUri);
                 filterChain.doFilter(requestWrapper, resp);
             } else {
                 filterChain.doFilter(request, resp);
             }
         } finally {
             final Object responseBody = this.getResponseBody(resp);
-            this.postHandle(responseBody);
+            this.postHandle(responseBody, requestUri);
             resp.copyBodyToResponse();
             MDC.clear();
         }
     }
+
     private String generateTraceId(HttpServletRequest request) {
         String traceId = request.getHeader(AppConstants.TRACE_ID_KEY);
         if (StringUtils.isNoneBlank(traceId)) {
@@ -70,12 +71,12 @@ public class LoggingFilter extends OncePerRequestFilter {
         return UUID.randomUUID().toString();
     }
 
-    protected void preHandle(Object requestBody) {
-        log.info("REQUEST : body-{}", JSON.stringify(requestBody));
+    protected void preHandle(Object requestBody, String requestUri) {
+        log.info("API : {} send REQUEST : body-{}", requestUri, JSON.stringify(requestBody));
     }
 
-    protected void postHandle(Object responseBody) {
-        log.info("RESPONSE : body-{}", JSON.stringify(responseBody));
+    protected void postHandle(Object responseBody, String requestUri) {
+        log.info("API : {} receive RESPONSE : body-{}", requestUri, JSON.stringify(responseBody));
     }
 
     private Object getRequestBody(RequestWrapper request) {

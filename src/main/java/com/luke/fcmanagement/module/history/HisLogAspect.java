@@ -1,8 +1,7 @@
 package com.luke.fcmanagement.module.history;
 
-import com.luke.fcmanagement.module.history.annotation.CaptureHistory;
 import com.luke.fcmanagement.constants.Status;
-import com.luke.fcmanagement.module.history.impl.HisLogServiceImpl;
+import com.luke.fcmanagement.module.history.annotation.CaptureHistory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.annotation.AfterReturning;

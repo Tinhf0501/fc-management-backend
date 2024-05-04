@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum ActionType {
     CREATE_FC("CREATE_FC", "Thêm mới đội bóng"),
+    UPDATE_FC("UPDATE_FC", "Chỉnh sửa đội bóng"),
     UNKNOWN("UNKNOWN", "Không xác định");
 
     private final String value;

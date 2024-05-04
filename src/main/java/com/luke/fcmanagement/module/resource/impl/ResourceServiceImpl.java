@@ -1,13 +1,11 @@
 package com.luke.fcmanagement.module.resource.impl;
 
-import com.luke.fcmanagement.constants.ErrorCode;
-import com.luke.fcmanagement.module.resource.constant.FCMediaType;
-import com.luke.fcmanagement.module.resource.ResourceEntity;
-import com.luke.fcmanagement.exception.BusinessException;
-import com.luke.fcmanagement.module.resource.file.FileUtils;
-import com.luke.fcmanagement.module.resource.file.IFileService;
 import com.luke.fcmanagement.module.resource.IResourceRepository;
 import com.luke.fcmanagement.module.resource.IResourceService;
+import com.luke.fcmanagement.module.resource.ResourceEntity;
+import com.luke.fcmanagement.module.resource.constant.MediaType;
+import com.luke.fcmanagement.module.resource.file.FileUtils;
+import com.luke.fcmanagement.module.resource.file.IFileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -29,21 +27,18 @@ public class ResourceServiceImpl implements IResourceService {
     @Override
     public void saveBathResource(List<MultipartFile> resources, Long fcId) {
         if (CollectionUtils.isEmpty(resources)) return;
-        if (!FileUtils.isValidListFile(resources)) {
-            throw new BusinessException(ErrorCode.VALIDATE_FAIL);
-        }
         for (MultipartFile resource : resources) {
-            FCMediaType fcMediaType;
+            MediaType fcMediaType;
             if (FileUtils.isImage(resource)) {
-                fcMediaType = FCMediaType.IMAGE;
+                fcMediaType = MediaType.IMAGE;
             } else {
-                fcMediaType = FCMediaType.VIDEO;
+                fcMediaType = MediaType.VIDEO;
             }
             this.saveResource(resource, fcId, fcMediaType);
         }
     }
 
-    public void saveResource(MultipartFile resource, long fcId, FCMediaType fcMediaType, String fileName) {
+    public void saveResource(MultipartFile resource, long fcId, MediaType fcMediaType, String fileName) {
         if (Objects.isNull(resource) || Objects.isNull(fcMediaType)) return;
         log.info("save resource {} name: {}", fcMediaType.getDisplay(), fileName);
         String pathSave = this.fileService.saveFile(resource, fcMediaType, fileName);

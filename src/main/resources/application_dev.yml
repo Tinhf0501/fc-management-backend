@@ -6,7 +6,7 @@ server:
 spring:
   servlet:
     multipart:
-      max-file-size: 5MB # Cấu hình kích thước tối đa cho một file được upload (5MB ở đây)
+      max-file-size: 5MB # Cấu hình kích thước tối đa cho một file được upload
       max-request-size: 10MB # Cấu hình kích thước tối đa cho một request chứa nhiều file
   config:
     activate:
@@ -14,7 +14,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/fc_management?createDatabaseIfNotExist=true
     username: root
-    password: NguyenVanSuong@2001
+    password: Tinh0501@@123
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
@@ -27,7 +27,7 @@ media:
   saver:
     active: local
     local:
-      absolute-path: "D:\\edu\\fc-management\\fc-management-backend\\upload"
+      absolute-path: "D:\\EXAMPLE\\FC_MANAGEMENT\\BE\\fc-management-backend\\upload"
       host: http://localhost:${server.port}${server.servlet.context-path}/resources
 logging:
   ignores-path:
@@ -35,3 +35,9 @@ logging:
 security:
   cors:
     url: http://localhost:4200
+springdoc:
+  api-docs:
+    path: /api-docs #default url doc api http://localhost:8080/v3/api-docs/
+  swagger-ui:
+    path: /swagger-ui.html # default http://localhost:8080/swagger-ui.html
+    operations-sorter: method # sắp xếp api theo http method

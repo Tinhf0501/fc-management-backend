@@ -1,6 +1,6 @@
 package com.luke.fcmanagement.module.resource;
 
-import com.luke.fcmanagement.module.resource.constant.FCMediaType;
+import com.luke.fcmanagement.module.resource.constant.MediaType;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -10,9 +10,9 @@ public interface IResourceService {
 
     void saveBathResource(List<MultipartFile> resources, Long fcId);
 
-    void saveResource(MultipartFile resource, long fcId, FCMediaType fcMediaType, String fileName);
+    void saveResource(MultipartFile resource, long fcId, MediaType fcMediaType, String fileName);
 
-    default void saveResource(MultipartFile resource, long fcId, FCMediaType fcMediaType) {
+    default void saveResource(MultipartFile resource, long fcId, MediaType fcMediaType) {
         String fileName = fcId + File.separator + resource.getOriginalFilename();
         this.saveResource(resource, fcId, fcMediaType, fileName);
     }
