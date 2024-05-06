@@ -20,15 +20,16 @@ import com.luke.fcmanagement.module.job.IJobRepository;
 import com.luke.fcmanagement.utils.JSON;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -40,7 +41,11 @@ public class ResourceServiceImpl implements IResourceService {
     private final LocalSaverFileConfig localSaverFileConfig;
     private final IJobService jobService;
 
+    @Value("${media.saver.active}")
+    private String provider;
+
     @Override
+    @Transactional(rollbackFor = Throwable.class)
     public void saveBathResource(List<MultipartFile> resources, Long targetId, TargetType targetType) {
         log.info("save resource batch :{} files of target id: {}", resources.size(), targetId);
         if (CollectionUtils.isEmpty(resources)) return;
@@ -55,6 +60,7 @@ public class ResourceServiceImpl implements IResourceService {
         }
     }
 
+    @Transactional(rollbackFor = Throwable.class)
     public void saveResource(MultipartFile resource, long targetId, MediaType fcMediaType, String fileName, TargetType targetType) {
         if (Objects.isNull(resource) || Objects.isNull(fcMediaType)) return;
         log.info("save resource {} name: {}", fcMediaType.getDisplay(), fileName);
@@ -66,11 +72,13 @@ public class ResourceServiceImpl implements IResourceService {
                 .mediaType(fcMediaType.getValue())
                 .description(fcMediaType.getDisplay())
                 .targetType(targetType.getValue())
+                .provider(provider)
                 .build();
         resourceRepository.save(logoFC);
     }
 
     @Override
+    @Transactional(rollbackFor = Throwable.class)
     public void batchDeleteResourceById(List<Long> ids) {
         log.info("delete fc resource batch :{} id files", ids.size());
         if (CollectionUtils.isEmpty(ids)) return;
@@ -78,6 +86,7 @@ public class ResourceServiceImpl implements IResourceService {
     }
 
     @Override
+    @Transactional(rollbackFor = Throwable.class)
     public void deleteResource(String path) {
         log.info("delete resource with path : {}", path.replace(this.localSaverFileConfig.getHost(), ""));
         String pathDelLocal = path.replace(this.localSaverFileConfig.getHost(), this.localSaverFileConfig.getAbsolutePath()).replace("/", File.separator);
@@ -86,7 +95,23 @@ public class ResourceServiceImpl implements IResourceService {
         DeleteResourceJob deleteResourceJob = DeleteResourceJob.builder()
                 .path(pathDelLocal)
                 .build();
-        this.jobService.create(JSON.stringify(deleteResourceJob), JobType.DELETE_RESOURCE);
+        this.jobService.createJob(JSON.stringify(deleteResourceJob), JobType.DELETE_RESOURCE);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Throwable.class)
+    public void deleteResourcesByTargetIdsAndTargetType(List<Long> targetIds, TargetType targetType) {
+        log.info("delete resource with by list targetIds size: {} and target type :{}", targetIds.size(), targetType.getDisplay());
+        List<ResourceEntity> list = resourceRepository.findResourceEntitiesByTargetIdInAndTargetType(targetIds, targetType.getValue());
+        List<String> paths = Stream.ofNullable(list).flatMap(Collection::stream).map(ResourceEntity::getPath).toList();
+        Stream.ofNullable(paths).flatMap(Collection::stream).forEach(p -> {
+                    String pathDelLocal = p.replace(this.localSaverFileConfig.getHost(), this.localSaverFileConfig.getAbsolutePath()).replace("/", File.separator);
+                    DeleteResourceJob deleteResourceJob = DeleteResourceJob.builder()
+                            .path(pathDelLocal)
+                            .build();
+                    this.jobService.createJob(JSON.stringify(deleteResourceJob), JobType.DELETE_RESOURCE);
+                }
+        );
     }
 
 

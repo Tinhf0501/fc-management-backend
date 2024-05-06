@@ -24,8 +24,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 
+import java.util.Collection;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -89,13 +91,19 @@ public class FootballClubServiceImpl implements IFootballClubService {
             throw new BusinessException(ErrorCode.VALIDATE_FAIL);
         Optional.ofNullable(request.getLogo())
                 .ifPresent(logo -> this.resourceService.saveResource(logo, fcSaved.getFcId(), MediaType.IMAGE, TargetType.FC));
+
+        // * xóa logo cũ
         Optional.ofNullable(request.getPathLogoDel())
                 .ifPresent(logo -> this.resourceService.deleteResource(logo));
 
-        Optional.ofNullable(request.getFcMemberIdsDelete()).ifPresent(memberId -> this.memberService.batchDeleteFcMemberById(request.getFcMemberIdsDelete()));
+        // * xóa list member
+        Optional.ofNullable(request.getFcMemberIdsDelete()).ifPresent(memberId -> this.memberService.batchDeleteFcMemberById(memberId));
 
-        Optional.ofNullable(request.getPathMediaDelete()).ifPresent(memberId -> this.resourceService.batchDeleteResourceById(request.getPathMediaDelete()));
+        // * xóa list media
+        Stream.ofNullable(request.getPathMediaDelete()).flatMap(Collection::stream).forEach(path -> this.resourceService.deleteResource(path));
 
-        return null;
+        ApiBody apiBody = new ApiBody();
+        apiBody.setMessage(Message.UPDATE_FC_SUCCESS);
+        return ApiResponse.ok(apiBody);
     }
 }

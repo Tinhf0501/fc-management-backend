@@ -17,6 +17,8 @@ public interface IResourceService {
 
     void deleteResource(String path);
 
+    void deleteResourcesByTargetIdsAndTargetType(List<Long> targetIds, TargetType targetType);
+
     default void saveResource(MultipartFile resource, long targetId, MediaType fcMediaType, TargetType targetType) {
         String fileName = targetId + File.separator + resource.getOriginalFilename();
         this.saveResource(resource, targetId, fcMediaType, fileName, targetType);

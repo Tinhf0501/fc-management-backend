@@ -8,5 +8,5 @@ import java.util.Optional;
 public interface IResourceRepository extends JpaRepository<ResourceEntity, Long> {
     Optional<ResourceEntity> findResourceEntityByPath(String path);
 
-    List<ResourceEntity> findResourceEntitiesBy
+    List<ResourceEntity> findResourceEntitiesByTargetIdInAndTargetType(List<Long> ids, Integer targetType);
 }

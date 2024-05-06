@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 public enum Message {
     CREATE_FC_SUCCESS("CREATE_FC_SUCCESS", "Tạo mới đội bóng thành công!"),
     CREATE_FC_FAIL("FAIL", "Tạo mới đội bóng thất bại"),
+    UPDATE_FC_SUCCESS("UPDATE_FC_SUCCESS", "Cập nhật đội bóng thành công!"),
     UNKNOWN("UNKNOWN", "Không xác định");
 
     private final String code;

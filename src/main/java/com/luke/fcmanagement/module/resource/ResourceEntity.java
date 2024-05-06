@@ -37,4 +37,7 @@ public class ResourceEntity extends BaseEntity {
 
     @Column(name = "DESCRIPTION", length = 2000)
     private String description;
+
+    @Column(name = "PROVIDER", nullable = false)
+    private String provider;
 }

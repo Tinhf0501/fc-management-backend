@@ -15,6 +15,7 @@ import com.luke.fcmanagement.module.resource.file.IFileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
@@ -27,13 +28,13 @@ import java.util.Optional;
 public class MemberServiceImpl implements IMemberService {
 
     private final IMemberRepository memberRepository;
-    private final IFileService fileService;
     private final IResourceService resourceService;
 
     @Override
+    @Transactional(rollbackFor = Throwable.class)
     public void saveFcMember(List<CreateFCMemberRequest> members, Long fcId) {
         if (CollectionUtils.isEmpty(members)) return;
-        log.info("[START] save fc member-{} fcId-{}", members.size(), fcId);
+        log.info("save fc member-{} fcId-{}", members.size(), fcId);
         members.forEach(e -> {
             MemberEntity member = e.toEntity(fcId, FCStatus.INACTIVE);
             MemberEntity saveMem = this.memberRepository.save(member);
@@ -41,21 +42,22 @@ public class MemberServiceImpl implements IMemberService {
                 this.resourceService.saveResource(e.getAvatar(), saveMem.getFcMemberId(), MediaType.IMAGE, TargetType.MEMBER);
             }
         });
-        log.info("[END] save fc member-{} fcId-{}", members.size(), fcId);
     }
 
     @Override
+    @Transactional(rollbackFor = Throwable.class)
     public void batchDeleteFcMemberById(List<Long> memberIds) {
         if (CollectionUtils.isEmpty(memberIds)) return;
-        log.info("[START] delete fc member in batch by list ids size : {}", memberIds.size());
+        log.info("delete fc member in batch by list ids size : {}", memberIds.size());
         this.memberRepository.deleteAllByIdInBatch(memberIds);
-        log.info("[END] delete fc member in batch by list ids size : {}", memberIds.size());
+        this.resourceService.deleteResourcesByTargetIdsAndTargetType(memberIds, TargetType.MEMBER);
     }
 
     @Override
+    @Transactional(rollbackFor = Throwable.class)
     public void updateMember(List<UpdateFCMemberRequest> members, Long fcId) {
         if (CollectionUtils.isEmpty(members)) return;
-        log.info("[START] save fc member-{} fcId-{}", members.size(), fcId);
+        log.info("save fc member-{} fcId-{}", members.size(), fcId);
         members.forEach(e -> {
             MemberEntity memberOnDb = this.memberRepository.findById(e.getMemberId()).orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_RECORD));
             if (Objects.equals(memberOnDb.getFcId(), e.getFcId()))
@@ -76,6 +78,5 @@ public class MemberServiceImpl implements IMemberService {
                     );
             this.memberRepository.save(member);
         });
-        log.info("[END] save fc member-{} fcId-{}", members.size(), fcId);
     }
 }

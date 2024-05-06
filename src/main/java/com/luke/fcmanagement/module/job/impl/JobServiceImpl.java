@@ -8,6 +8,11 @@ import com.luke.fcmanagement.utils.JSON;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Stream;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -16,7 +21,9 @@ public class JobServiceImpl implements IJobService {
     private final IJobRepository jobRepository;
 
     @Override
-    public void create(String jobValue, JobType jobType) {
+    @Transactional(rollbackFor = Throwable.class)
+    public void createJob(String jobValue, JobType jobType) {
+        log.info("create job entity with job type: {}", jobType.getDesc());
         JobEntity jobEntity = JobEntity.builder()
                 .jobType(jobType.getValue())
                 .jobValue(JSON.stringify(jobValue))

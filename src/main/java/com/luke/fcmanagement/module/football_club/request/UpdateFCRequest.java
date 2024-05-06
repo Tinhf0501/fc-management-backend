@@ -18,5 +18,5 @@ public class UpdateFCRequest extends CreateFCRequest {
     private List<UpdateFCMemberRequest> fcMemberUpdate;
     private String pathLogoDel;
     private List<Long> fcMemberIdsDelete;
-    private List<Long> pathMediaDelete;
+    private List<String> pathMediaDelete;
 }
