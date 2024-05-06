@@ -11,7 +11,6 @@ import com.luke.fcmanagement.module.member.MemberEntity;
 import com.luke.fcmanagement.module.resource.IResourceService;
 import com.luke.fcmanagement.module.resource.constant.MediaType;
 import com.luke.fcmanagement.module.resource.constant.TargetType;
-import com.luke.fcmanagement.module.resource.file.IFileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

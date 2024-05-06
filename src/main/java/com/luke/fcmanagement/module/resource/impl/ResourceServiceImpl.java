@@ -2,13 +2,10 @@ package com.luke.fcmanagement.module.resource.impl;
 
 import com.luke.fcmanagement.config.LocalSaverFileConfig;
 import com.luke.fcmanagement.constants.ErrorCode;
-import com.luke.fcmanagement.constants.FieldConstant;
 import com.luke.fcmanagement.constants.JobType;
-import com.luke.fcmanagement.module.job.IJobService;
-import com.luke.fcmanagement.module.job.JobEntity;
 import com.luke.fcmanagement.exception.BusinessException;
+import com.luke.fcmanagement.module.job.IJobService;
 import com.luke.fcmanagement.module.job.delete_resource.DeleteResourceJob;
-import com.luke.fcmanagement.module.job.impl.JobServiceImpl;
 import com.luke.fcmanagement.module.resource.IResourceRepository;
 import com.luke.fcmanagement.module.resource.IResourceService;
 import com.luke.fcmanagement.module.resource.ResourceEntity;
@@ -16,7 +13,6 @@ import com.luke.fcmanagement.module.resource.constant.MediaType;
 import com.luke.fcmanagement.module.resource.constant.TargetType;
 import com.luke.fcmanagement.module.resource.file.FileUtils;
 import com.luke.fcmanagement.module.resource.file.IFileService;
-import com.luke.fcmanagement.module.job.IJobRepository;
 import com.luke.fcmanagement.utils.JSON;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,8 +23,9 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 @Service
