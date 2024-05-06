@@ -17,9 +17,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.io.File;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -64,12 +64,16 @@ public class MemberServiceImpl implements IMemberService {
             member.setFcMemberId(e.getMemberId());
             member.setCreatedBy(memberOnDb.getCreatedBy());
             member.setCreatedDate(memberOnDb.getCreatedDate());
-            if (Objects.nonNull(e.getAvatar())) {
-                this.resourceService.saveResource(e.getAvatar(), member.getFcMemberId(), MediaType.IMAGE, TargetType.MEMBER);
-            }
-            if (Objects.nonNull(e.getPathAvatarDel())){
-                this.resourceService.deleteResource(e.getPathAvatarDel());
-            }
+            if (Objects.nonNull(e.getAvatar()) && Objects.isNull(e.getPathAvatarDel()))
+                throw new BusinessException(ErrorCode.VALIDATE_FAIL);
+            Optional.ofNullable(e.getAvatar())
+                    .ifPresent(
+                            avt -> this.resourceService.saveResource(e.getAvatar(), member.getFcMemberId(), MediaType.IMAGE, TargetType.MEMBER)
+                    );
+            Optional.ofNullable(e.getPathAvatarDel())
+                    .ifPresent(
+                            path -> this.resourceService.deleteResource(path)
+                    );
             this.memberRepository.save(member);
         });
         log.info("[END] save fc member-{} fcId-{}", members.size(), fcId);

@@ -16,6 +16,7 @@ public class UpdateFCRequest extends CreateFCRequest {
     @NotNull(message = "ID của FC không được bỏ trống")
     private Long fcId;
     private List<UpdateFCMemberRequest> fcMemberUpdate;
+    private String pathLogoDel;
     private List<Long> fcMemberIdsDelete;
-    private List<Long> pathMediaIdsDelete;
+    private List<Long> pathMediaDelete;
 }

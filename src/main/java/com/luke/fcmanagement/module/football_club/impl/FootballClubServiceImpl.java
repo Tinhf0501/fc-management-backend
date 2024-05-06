@@ -24,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -84,12 +85,16 @@ public class FootballClubServiceImpl implements IFootballClubService {
         this.memberService.updateMember(request.getFcMemberUpdate(), fcSaved.getFcId());
 
         // * save logo FC
+        if (Objects.nonNull(request.getLogo()) && Objects.isNull(request.getPathLogoDel()))
+            throw new BusinessException(ErrorCode.VALIDATE_FAIL);
         Optional.ofNullable(request.getLogo())
                 .ifPresent(logo -> this.resourceService.saveResource(logo, fcSaved.getFcId(), MediaType.IMAGE, TargetType.FC));
+        Optional.ofNullable(request.getPathLogoDel())
+                .ifPresent(logo -> this.resourceService.deleteResource(logo));
 
         Optional.ofNullable(request.getFcMemberIdsDelete()).ifPresent(memberId -> this.memberService.batchDeleteFcMemberById(request.getFcMemberIdsDelete()));
 
-        Optional.ofNullable(request.getPathMediaIdsDelete()).ifPresent(memberId -> this.resourceService.batchDeleteResourceById(request.getPathMediaIdsDelete()));
+        Optional.ofNullable(request.getPathMediaDelete()).ifPresent(memberId -> this.resourceService.batchDeleteResourceById(request.getPathMediaDelete()));
 
         return null;
     }

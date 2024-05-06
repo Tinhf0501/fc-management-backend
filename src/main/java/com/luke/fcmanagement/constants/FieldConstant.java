@@ -8,4 +8,5 @@ public class FieldConstant {
     public static final String DATA = "data";
 
     public static final String MESSAGE = "msg";
+    public static final String PATH = "path";
 }
