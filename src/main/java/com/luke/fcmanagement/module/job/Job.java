@@ -2,6 +2,6 @@ package com.luke.fcmanagement.module.job;
 
 import com.luke.fcmanagement.constants.JobType;
 
-public interface IJobService {
-    void createJob(? extends Job jobValue);
+public interface Job {
+    JobType getType();
 }

@@ -3,6 +3,7 @@ package com.luke.fcmanagement.module.job.impl;
 import com.luke.fcmanagement.constants.JobType;
 import com.luke.fcmanagement.module.job.IJobRepository;
 import com.luke.fcmanagement.module.job.IJobService;
+import com.luke.fcmanagement.module.job.Job;
 import com.luke.fcmanagement.module.job.JobEntity;
 import com.luke.fcmanagement.utils.JSON;
 import lombok.RequiredArgsConstructor;
@@ -18,10 +19,10 @@ public class JobServiceImpl implements IJobService {
 
     @Override
     @Transactional(rollbackFor = Throwable.class)
-    public void createJob(String jobValue, JobType jobType) {
-        log.info("create job entity with job type: {}", jobType.getDesc());
+    public void createJob(Job jobValue) {
+        log.info("create job entity with job type: {}", jobValue.getType().getDesc());
         JobEntity jobEntity = JobEntity.builder()
-                .jobType(jobType.getValue())
+                .jobType(jobValue.getType().getValue())
                 .jobValue(JSON.stringify(jobValue))
                 .build();
         this.jobRepository.save(jobEntity);

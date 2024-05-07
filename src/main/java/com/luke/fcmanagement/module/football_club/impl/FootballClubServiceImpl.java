@@ -16,7 +16,7 @@ import com.luke.fcmanagement.module.resource.IResourceService;
 import com.luke.fcmanagement.module.resource.constant.MediaType;
 import com.luke.fcmanagement.module.resource.constant.TargetType;
 import com.luke.fcmanagement.utils.JSON;
-import com.luke.fcmanagement.utils.Utils;
+import com.luke.fcmanagement.utils.CommonUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -27,6 +27,7 @@ import org.springframework.validation.BindingResult;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Stream;
 
 @Service
@@ -41,15 +42,18 @@ public class FootballClubServiceImpl implements IFootballClubService {
     @Override
     @Transactional(rollbackFor = Throwable.class)
     public ApiResponse createFC(CreateFCRequest request, BindingResult bindingResult) throws BindException {
-        log.info("API : {} send REQUEST : body-{}", Utils.getRequestUri(), JSON.stringify(request));
+        log.info("API : {} send REQUEST : body-{}", CommonUtils.getRequestUri(), JSON.stringify(request));
         if (bindingResult.hasErrors()) {
             throw new BindException(bindingResult);
         }
+        String slug = CommonUtils.createSLug(request.getFcName() + " " + String.valueOf(UUID.randomUUID()).replace("-", ""));
+
         // * save FC
         FootballClubEntity fc = FootballClubEntity.builder()
                 .fcName(request.getFcName())
                 .description(request.getDescription())
                 .status(FCStatus.INACTIVE.getValue())
+                .slug(slug)
                 .build();
         FootballClubEntity fcSaved = footballClubRepository.save(fc);
 
@@ -71,7 +75,7 @@ public class FootballClubServiceImpl implements IFootballClubService {
     @Override
     @Transactional(rollbackFor = Throwable.class)
     public ApiResponse updateFC(UpdateFCRequest request, BindingResult bindingResult) throws BusinessException, BindException {
-        log.info("API : {} send REQUEST : body-{}", Utils.getRequestUri(), JSON.stringify(request));
+        log.info("API : {} send REQUEST : body-{}", CommonUtils.getRequestUri(), JSON.stringify(request));
         if (bindingResult.hasErrors()) {
             throw new BindException(bindingResult);
         }

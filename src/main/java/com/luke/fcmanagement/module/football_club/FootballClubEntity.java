@@ -29,4 +29,7 @@ public class FootballClubEntity extends BaseEntity {
 
     @Column(name = "STATUS", nullable = false)
     private Integer status;
+
+    @Column(name = "SLUG", length = 2000)
+    private String slug;
 }
