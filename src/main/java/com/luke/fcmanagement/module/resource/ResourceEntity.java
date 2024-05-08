@@ -11,7 +11,8 @@ import org.hibernate.annotations.GenericGenerator;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "TB_RESOURCE")
+@Table(name = "TB_RESOURCE")
+@Entity
 @Builder
 public class ResourceEntity extends BaseEntity {
     @Id

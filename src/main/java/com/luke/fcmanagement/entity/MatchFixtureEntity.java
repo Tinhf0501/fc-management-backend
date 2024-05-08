@@ -12,7 +12,8 @@ import java.util.Date;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "TB_MATCH_FIXTURE")
+@Table(name = "TB_MATCH_FIXTURE")
+@Entity
 public class MatchFixtureEntity extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")

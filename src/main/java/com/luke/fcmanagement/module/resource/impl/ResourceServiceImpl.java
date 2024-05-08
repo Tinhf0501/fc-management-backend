@@ -2,7 +2,6 @@ package com.luke.fcmanagement.module.resource.impl;
 
 import com.luke.fcmanagement.config.LocalSaverFileConfig;
 import com.luke.fcmanagement.constants.ErrorCode;
-import com.luke.fcmanagement.constants.JobType;
 import com.luke.fcmanagement.exception.BusinessException;
 import com.luke.fcmanagement.module.job.IJobService;
 import com.luke.fcmanagement.module.job.delete_resource.DeleteResourceJob;
@@ -13,7 +12,6 @@ import com.luke.fcmanagement.module.resource.constant.MediaType;
 import com.luke.fcmanagement.module.resource.constant.TargetType;
 import com.luke.fcmanagement.module.resource.file.FileUtils;
 import com.luke.fcmanagement.module.resource.file.IFileService;
-import com.luke.fcmanagement.utils.JSON;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -92,7 +90,7 @@ public class ResourceServiceImpl implements IResourceService {
         DeleteResourceJob deleteResourceJob = DeleteResourceJob.builder()
                 .path(pathDelLocal)
                 .build();
-        this.jobService.createJob(JSON.stringify(deleteResourceJob), JobType.DELETE_RESOURCE);
+        this.jobService.createJob(deleteResourceJob);
     }
 
     @Override
@@ -106,7 +104,7 @@ public class ResourceServiceImpl implements IResourceService {
                     DeleteResourceJob deleteResourceJob = DeleteResourceJob.builder()
                             .path(pathDelLocal)
                             .build();
-                    this.jobService.createJob(JSON.stringify(deleteResourceJob), JobType.DELETE_RESOURCE);
+                    this.jobService.createJob(deleteResourceJob);
                 }
         );
     }

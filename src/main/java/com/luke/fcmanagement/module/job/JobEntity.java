@@ -11,7 +11,8 @@ import org.hibernate.annotations.GenericGenerator;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Entity(name = "TB_JOB")
+@Table(name = "TB_JOB")
+@Entity
 public class JobEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")

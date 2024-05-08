@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 public enum ActionType {
     CREATE_FC("CREATE_FC", "Thêm mới đội bóng"),
     UPDATE_FC("UPDATE_FC", "Chỉnh sửa đội bóng"),
+    SEARCH_FC("SEARCH_FC", "Tìm kiếm đội bóng"),
     UNKNOWN("UNKNOWN", "Không xác định");
 
     private final String value;

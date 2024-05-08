@@ -15,4 +15,12 @@ public class JSON {
             return StringUtils.EMPTY;
         }
     }
+
+    public String writeObject(Object object) {
+        try {
+            return objectMapper.writeValueAsString(object);
+        } catch (Exception ex) {
+            return StringUtils.EMPTY;
+        }
+    }
 }

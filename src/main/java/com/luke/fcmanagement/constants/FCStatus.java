@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.Objects;
+
 @Getter
 @AllArgsConstructor
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
@@ -16,7 +18,9 @@ public enum FCStatus {
     private final int value;
     private final String desc;
 
-    public static FCStatus getStatus(int value) {
+    public static FCStatus getStatus(Integer value) {
+        if (Objects.isNull(value))
+            return UNKNOWN;
         for (FCStatus status : values()) {
             if (status.getValue() == value) {
                 return status;

@@ -7,7 +7,8 @@ import org.hibernate.annotations.GenericGenerator;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "TB_FOOTBALL_CLUB")
+@Table(name = "TB_FOOTBALL_CLUB")
+@Entity
 @Builder
 @Setter
 @Getter

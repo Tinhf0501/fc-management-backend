@@ -2,32 +2,36 @@ package com.luke.fcmanagement.module.football_club.impl;
 
 import com.luke.fcmanagement.constants.ErrorCode;
 import com.luke.fcmanagement.constants.FCStatus;
+import com.luke.fcmanagement.constants.FieldConstant;
 import com.luke.fcmanagement.constants.Message;
 import com.luke.fcmanagement.exception.BusinessException;
 import com.luke.fcmanagement.model.ApiBody;
 import com.luke.fcmanagement.model.ApiResponse;
+import com.luke.fcmanagement.model.SearchResponse;
 import com.luke.fcmanagement.module.football_club.FootballClubEntity;
 import com.luke.fcmanagement.module.football_club.IFootballClubRepository;
 import com.luke.fcmanagement.module.football_club.IFootballClubService;
 import com.luke.fcmanagement.module.football_club.request.CreateFCRequest;
+import com.luke.fcmanagement.module.football_club.request.SearchFcRequest;
 import com.luke.fcmanagement.module.football_club.request.UpdateFCRequest;
+import com.luke.fcmanagement.module.football_club.response.ISearchFCResponse;
 import com.luke.fcmanagement.module.member.IMemberService;
 import com.luke.fcmanagement.module.resource.IResourceService;
 import com.luke.fcmanagement.module.resource.constant.MediaType;
 import com.luke.fcmanagement.module.resource.constant.TargetType;
-import com.luke.fcmanagement.utils.JSON;
 import com.luke.fcmanagement.utils.CommonUtils;
+import com.luke.fcmanagement.utils.JSON;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 
-import java.util.Collection;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Stream;
 
 @Service
@@ -93,12 +97,11 @@ public class FootballClubServiceImpl implements IFootballClubService {
         // * save logo FC
         if (Objects.nonNull(request.getLogo()) && Objects.isNull(request.getPathLogoDel()))
             throw new BusinessException(ErrorCode.VALIDATE_FAIL);
-        Optional.ofNullable(request.getLogo())
-                .ifPresent(logo -> this.resourceService.saveResource(logo, fcSaved.getFcId(), MediaType.IMAGE, TargetType.FC));
-
         // * xóa logo cũ
         Optional.ofNullable(request.getPathLogoDel())
                 .ifPresent(logo -> this.resourceService.deleteResource(logo));
+        Optional.ofNullable(request.getLogo())
+                .ifPresent(logo -> this.resourceService.saveResource(logo, fcSaved.getFcId(), MediaType.IMAGE, TargetType.FC));
 
         // * xóa list member
         Optional.ofNullable(request.getFcMemberIdsDelete()).ifPresent(memberId -> this.memberService.batchDeleteFcMemberById(memberId));
@@ -108,6 +111,27 @@ public class FootballClubServiceImpl implements IFootballClubService {
 
         ApiBody apiBody = new ApiBody();
         apiBody.setMessage(Message.UPDATE_FC_SUCCESS);
+        return ApiResponse.ok(apiBody);
+    }
+
+    @Override
+    public ApiResponse searchFC(SearchFcRequest request) throws BusinessException {
+        request.setFromDate(CommonUtils.getDateWith00h00(request.getFromDate()));
+        request.setToDate(CommonUtils.getDateWith23h59(request.getToDate()));
+        Pageable pageable = CommonUtils.createPageable(request);
+        Page<ISearchFCResponse> resultSearch = footballClubRepository.search(
+                StringUtils.isBlank(request.getFcName()) ? null : request.getFcName(),
+                request.getFcStatus(),
+                request.getFromDate(),
+                request.getToDate(),
+                pageable
+        );
+        ApiBody apiBody = new ApiBody();
+        apiBody.setMessage(Message.SEARCH_FC_SUCCESS);
+        SearchResponse<List<ISearchFCResponse>> result = new SearchResponse<>();
+        result.setItems(resultSearch.getContent());
+        result.setTotalItems(resultSearch.getTotalElements());
+        apiBody.put(FieldConstant.DATA, result);
         return ApiResponse.ok(apiBody);
     }
 }

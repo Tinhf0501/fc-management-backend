@@ -13,8 +13,9 @@ import java.time.LocalDate;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "TB_FOOTBALL_CLUB_MEMBER")
+@Table(name = "TB_FOOTBALL_CLUB_MEMBER")
 @Builder
+@Entity
 public class MemberEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")

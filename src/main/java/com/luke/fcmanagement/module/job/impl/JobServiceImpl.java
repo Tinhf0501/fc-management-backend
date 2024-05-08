@@ -1,6 +1,5 @@
 package com.luke.fcmanagement.module.job.impl;
 
-import com.luke.fcmanagement.constants.JobType;
 import com.luke.fcmanagement.module.job.IJobRepository;
 import com.luke.fcmanagement.module.job.IJobService;
 import com.luke.fcmanagement.module.job.Job;
@@ -23,7 +22,7 @@ public class JobServiceImpl implements IJobService {
         log.info("create job entity with job type: {}", jobValue.getType().getDesc());
         JobEntity jobEntity = JobEntity.builder()
                 .jobType(jobValue.getType().getValue())
-                .jobValue(JSON.stringify(jobValue))
+                .jobValue(JSON.writeObject(jobValue))
                 .build();
         this.jobRepository.save(jobEntity);
     }
