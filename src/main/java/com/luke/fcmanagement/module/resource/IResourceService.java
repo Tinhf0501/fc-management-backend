@@ -1,6 +1,7 @@
 package com.luke.fcmanagement.module.resource;
 
 import com.luke.fcmanagement.module.resource.constant.MediaType;
+import com.luke.fcmanagement.module.resource.constant.TargetType;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -8,12 +9,18 @@ import java.util.List;
 
 public interface IResourceService {
 
-    void saveBathResource(List<MultipartFile> resources, Long fcId);
+    void saveBathResource(List<MultipartFile> resources, Long fcId, TargetType targetType);
 
-    void saveResource(MultipartFile resource, long fcId, MediaType fcMediaType, String fileName);
+    void saveResource(MultipartFile resource, long targetId, MediaType fcMediaType, String fileName, TargetType targetType);
 
-    default void saveResource(MultipartFile resource, long fcId, MediaType fcMediaType) {
-        String fileName = fcId + File.separator + resource.getOriginalFilename();
-        this.saveResource(resource, fcId, fcMediaType, fileName);
+    void batchDeleteResourceById(List<Long> ids);
+
+    void deleteResource(String path);
+
+    void deleteResourcesByTargetIdsAndTargetType(List<Long> targetIds, TargetType targetType);
+
+    default void saveResource(MultipartFile resource, long targetId, MediaType fcMediaType, TargetType targetType) {
+        String fileName = targetId + File.separator + resource.getOriginalFilename();
+        this.saveResource(resource, targetId, fcMediaType, fileName, targetType);
     }
 }

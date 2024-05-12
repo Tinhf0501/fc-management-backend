@@ -1,5 +1,8 @@
 server:
   shutdown: graceful
+  error:
+    whitelabel:
+      enabled: false
 
 spring:
   config:

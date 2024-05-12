@@ -23,6 +23,8 @@ spring:
     open-in-view: false
   jackson:
     default-property-inclusion: always
+  mvc:
+    time-zone: "Asia/Ho_Chi_Minh"
 media:
   saver:
     active: local

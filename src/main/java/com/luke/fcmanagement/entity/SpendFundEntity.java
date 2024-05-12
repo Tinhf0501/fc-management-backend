@@ -11,7 +11,8 @@ import java.math.BigDecimal;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "TB_SPEND_FUND")
+@Table(name = "TB_SPEND_FUND")
+@Entity
 public class SpendFundEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")

@@ -11,7 +11,8 @@ import org.hibernate.annotations.GenericGenerator;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "TB_FC_RESOURCE")
+@Table(name = "TB_RESOURCE")
+@Entity
 @Builder
 public class ResourceEntity extends BaseEntity {
     @Id
@@ -23,13 +24,21 @@ public class ResourceEntity extends BaseEntity {
     @Column(name = "PATH", length = 1000, nullable = false)
     private String path;
 
-    // * type : video, picture
-    @Column(name = "TYPE", nullable = false)
-    private String type;
+    // * type : video, img
+    @Column(name = "MEDIA_TYPE", nullable = false)
+    private String mediaType;
 
-    @Column(name = "FC_ID", nullable = false)
-    private Long fcId;
+    // * keyID: id FC, Member, ....
+    @Column(name = "KEY_ID", nullable = false)
+    private Long targetId;
+
+    // * keyType: FC, Mem, ...
+    @Column(name = "KEY_TYPE", nullable = false)
+    private Integer targetType;
 
     @Column(name = "DESCRIPTION", length = 2000)
     private String description;
+
+    @Column(name = "PROVIDER", nullable = false)
+    private String provider;
 }

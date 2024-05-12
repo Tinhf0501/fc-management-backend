@@ -13,7 +13,8 @@ import java.util.Date;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "TB_FUND_FC")
+@Table(name = "TB_FUND_FC")
+@Entity
 public class FundFcEntity extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")

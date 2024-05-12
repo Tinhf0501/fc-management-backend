@@ -13,4 +13,8 @@ import lombok.Setter;
 public class UpdateFCMemberRequest extends CreateFCMemberRequest {
     @NotNull(message = "ID của thành viên không được bỏ trống")
     private Long memberId;
+
+    private Long fcId;
+
+    private String pathAvatarDel;
 }

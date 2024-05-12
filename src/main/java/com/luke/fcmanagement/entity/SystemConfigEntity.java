@@ -9,7 +9,8 @@ import org.hibernate.annotations.GenericGenerator;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "TB_SYSTEM_CONFIG")
+@Table(name = "TB_SYSTEM_CONFIG")
+@Entity
 public class SystemConfigEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")

@@ -10,7 +10,8 @@ import org.hibernate.annotations.GenericGenerator;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "TB_MATCH_RESULT")
+@Table(name = "TB_MATCH_RESULT")
+@Entity
 public class MatchResultEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")

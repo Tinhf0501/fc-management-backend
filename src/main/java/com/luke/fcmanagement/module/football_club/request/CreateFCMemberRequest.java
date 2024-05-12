@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Getter
@@ -39,6 +40,8 @@ public class CreateFCMemberRequest {
     @Size(max = 2000, message = "Địa chỉ không được vượt quá 2000 kí tự")
     private String address;
 
+    private LocalDate dateOfBirthday;
+
     @Size(max = 2000, message = "Mô tả không được vượt quá 2000 kí tự")
     private String description;
 
@@ -63,6 +66,7 @@ public class CreateFCMemberRequest {
                 .description(this.getDescription())
                 .position(String.join(",", this.getPosition()))
                 .status(fcStatus.getValue())
+                .dateOfBirthday(this.getDateOfBirthday())
                 .build();
     }
 }
