@@ -11,5 +11,5 @@ public interface IMemberService {
 
     void batchDeleteFcMemberById(List<Long> memberIds);
 
-    void updateMember(List<UpdateFCMemberRequest> members, Long fcId);
+    void updateMember(List<UpdateFCMemberRequest> members);
 }

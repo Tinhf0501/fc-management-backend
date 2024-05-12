@@ -7,6 +7,7 @@ import com.luke.fcmanagement.constants.Message;
 import com.luke.fcmanagement.exception.BusinessException;
 import com.luke.fcmanagement.model.ApiBody;
 import com.luke.fcmanagement.model.ApiResponse;
+import com.luke.fcmanagement.model.SearchRequest;
 import com.luke.fcmanagement.model.SearchResponse;
 import com.luke.fcmanagement.module.football_club.FootballClubEntity;
 import com.luke.fcmanagement.module.football_club.IFootballClubRepository;
@@ -31,7 +32,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Stream;
 
 @Service
@@ -92,7 +96,7 @@ public class FootballClubServiceImpl implements IFootballClubService {
         this.memberService.saveFcMember(request.getFcMembers(), fcSaved.getFcId());
 
         // update fc member
-        this.memberService.updateMember(request.getFcMemberUpdate(), fcSaved.getFcId());
+        this.memberService.updateMember(request.getFcMemberUpdate());
 
         // * save logo FC
         if (Objects.nonNull(request.getLogo()) && Objects.isNull(request.getPathLogoDel()))
@@ -115,22 +119,23 @@ public class FootballClubServiceImpl implements IFootballClubService {
     }
 
     @Override
-    public ApiResponse searchFC(SearchFcRequest request) throws BusinessException {
-        request.setFromDate(CommonUtils.getDateWith00h00(request.getFromDate()));
-        request.setToDate(CommonUtils.getDateWith23h59(request.getToDate()));
-        Pageable pageable = CommonUtils.createPageable(request);
+    public ApiResponse searchFC(SearchRequest<SearchFcRequest> request) throws BusinessException {
+        request.getData().setFcName(StringUtils.isBlank(request.getData().getFcName()) ? null : request.getData().getFcName());
+        request.getData().setFromDate(CommonUtils.getDateWith00h00(request.getData().getFromDate()));
+        request.getData().setToDate(CommonUtils.getDateWith23h59(request.getData().getToDate()));
+        Pageable pageable = CommonUtils.createPageable(request.getPageNo(), request.getPageSize());
         Page<ISearchFCResponse> resultSearch = footballClubRepository.search(
-                StringUtils.isBlank(request.getFcName()) ? null : request.getFcName(),
-                request.getFcStatus(),
-                request.getFromDate(),
-                request.getToDate(),
+                request.getData(),
                 pageable
         );
         ApiBody apiBody = new ApiBody();
         apiBody.setMessage(Message.SEARCH_FC_SUCCESS);
-        SearchResponse<List<ISearchFCResponse>> result = new SearchResponse<>();
+        SearchResponse<ISearchFCResponse> result = new SearchResponse<>();
         result.setItems(resultSearch.getContent());
         result.setTotalItems(resultSearch.getTotalElements());
+        result.setTotalPage(result.getTotalPage());
+        result.setPage(request.getPageNo());
+        result.setPageSize(request.getPageSize());
         apiBody.put(FieldConstant.DATA, result);
         return ApiResponse.ok(apiBody);
     }

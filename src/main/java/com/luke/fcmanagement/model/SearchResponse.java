@@ -5,11 +5,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class SearchResponse<T> {
-    private T items;
+    private List<T> items;
     private long totalItems;
+    private long totalPage;
+    private long page;
+    private long pageSize;
 }

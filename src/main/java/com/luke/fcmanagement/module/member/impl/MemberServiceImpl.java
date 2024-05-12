@@ -17,9 +17,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -54,17 +54,21 @@ public class MemberServiceImpl implements IMemberService {
 
     @Override
     @Transactional(rollbackFor = Throwable.class)
-    public void updateMember(List<UpdateFCMemberRequest> members, Long fcId) {
+    public void updateMember(List<UpdateFCMemberRequest> members) {
         if (CollectionUtils.isEmpty(members)) return;
-        log.info("save fc member-{} fcId-{}", members.size(), fcId);
+        log.info("save fc member-{} fcId-{}", members.size());
+        List<Long> listIds = members.stream().map(UpdateFCMemberRequest::getMemberId).toList();
+        Map<Long, MemberEntity> listInDB = Stream.of(this.memberRepository.findAllByFcMemberIdIn(listIds))
+                .flatMap(Collection::stream)
+                .collect(Collectors.toMap(MemberEntity::getFcMemberId, member -> member));
+
         members.forEach(e -> {
-            MemberEntity memberOnDb = this.memberRepository.findById(e.getMemberId()).orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_RECORD));
-            if (Objects.equals(memberOnDb.getFcId(), e.getFcId()))
+            MemberEntity memberOnDb = listInDB.get(e.getMemberId());
+            if (Objects.isNull(memberOnDb))
                 throw new BusinessException(ErrorCode.VALIDATE_FAIL);
-            MemberEntity member = e.toEntity(e.getFcId(), FCStatus.getStatus(memberOnDb.getStatus()));
+            Long fcId = Objects.nonNull(e.getFcId()) ? e.getFcId() : memberOnDb.getFcId();
+            MemberEntity member = e.toEntity(fcId, FCStatus.getStatus(memberOnDb.getStatus()));
             member.setFcMemberId(e.getMemberId());
-            member.setCreatedBy(memberOnDb.getCreatedBy());
-            member.setCreatedDate(memberOnDb.getCreatedDate());
             if (Objects.nonNull(e.getAvatar()) && Objects.isNull(e.getPathAvatarDel()))
                 throw new BusinessException(ErrorCode.VALIDATE_FAIL);
             Optional.ofNullable(e.getAvatar())

@@ -2,6 +2,7 @@ package com.luke.fcmanagement.module.football_club;
 
 import com.luke.fcmanagement.exception.BusinessException;
 import com.luke.fcmanagement.model.ApiResponse;
+import com.luke.fcmanagement.model.SearchRequest;
 import com.luke.fcmanagement.module.football_club.request.CreateFCRequest;
 import com.luke.fcmanagement.module.football_club.request.SearchFcRequest;
 import com.luke.fcmanagement.module.football_club.request.UpdateFCRequest;
@@ -23,7 +24,7 @@ public class FootballClubController {
 
     @CaptureHistory(ActionType.SEARCH_FC)
     @PostMapping("/search")
-    public ApiResponse search(@Valid @RequestBody SearchFcRequest request) throws BusinessException {
+    public ApiResponse search(@Valid @RequestBody SearchRequest<SearchFcRequest> request) throws BusinessException {
         return footballClubService.searchFC(request);
     }
 

@@ -1,13 +1,12 @@
 package com.luke.fcmanagement.module.football_club;
 
+import com.luke.fcmanagement.module.football_club.request.SearchFcRequest;
 import com.luke.fcmanagement.module.football_club.response.ISearchFCResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-
-import java.util.Date;
 
 public interface IFootballClubRepository extends JpaRepository<FootballClubEntity, Long> {
 
@@ -22,16 +21,13 @@ public interface IFootballClubRepository extends JpaRepository<FootballClubEntit
             "f.slug as slug, " +
             "(select count(m.fcMemberId) from MemberEntity m where m.fcId = f.fcId) as totalMembers" +
             " from FootballClubEntity f " +
-            "where (:fcName is null or f.fcName like concat('%',:fcName,'%')) " +
-            "and (:fcStatus is null or f.status = :fcStatus) " +
-            "and (:fromDate is null or f.createdDate>=:fromDate) " +
-            "and (:toDate is null or f.createdDate <=:toDate) " +
+            "where (:#{#params.fcName} is null or f.fcName like concat('%',:#{#params.fcName},'%')) " +
+            "and (:#{#params.fcStatus} is null or f.status = :#{#params.fcStatus}) " +
+            "and (:#{#params.fromDate} is null or f.createdDate >= :#{#params.fromDate}) " +
+            "and (:#{#params.toDate} is null or f.createdDate <= :#{#params.toDate}) " +
             "order by f.createdDate desc")
     Page<ISearchFCResponse> search(
-            @Param("fcName") String fcName,
-            @Param("fcStatus") Integer fcStatus,
-            @Param("fromDate") Date createdDate,
-            @Param("toDate") Date toDate,
+            @Param("params") SearchFcRequest request,
             Pageable pageable
     );
 }

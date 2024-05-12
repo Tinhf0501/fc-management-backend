@@ -98,7 +98,7 @@ public class ResourceServiceImpl implements IResourceService {
     public void deleteResourcesByTargetIdsAndTargetType(List<Long> targetIds, TargetType targetType) {
         log.info("delete resource with by list targetIds size: {} and target type :{}", targetIds.size(), targetType.getDisplay());
         List<ResourceEntity> list = resourceRepository.findResourceEntitiesByTargetIdInAndTargetType(targetIds, targetType.getValue());
-        List<String> paths = Stream.ofNullable(list).flatMap(Collection::stream).map(ResourceEntity::getPath).toList();
+        List<String> paths = list.stream().map(ResourceEntity::getPath).toList();
         Stream.ofNullable(paths).flatMap(Collection::stream).forEach(p -> {
                     String pathDelLocal = p.replace(this.localSaverFileConfig.getHost(), this.localSaverFileConfig.getAbsolutePath()).replace("/", File.separator);
                     DeleteResourceJob deleteResourceJob = DeleteResourceJob.builder()

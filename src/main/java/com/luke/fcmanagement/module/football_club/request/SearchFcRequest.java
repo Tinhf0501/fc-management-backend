@@ -11,7 +11,7 @@ import java.util.Date;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class SearchFcRequest extends PagingRequest {
+public class SearchFcRequest {
     private String fcName;
     private Integer fcStatus;
     private Date fromDate;
