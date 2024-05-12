@@ -58,7 +58,7 @@ public class MemberServiceImpl implements IMemberService {
         if (CollectionUtils.isEmpty(members)) return;
         log.info("save fc member-{} fcId-{}", members.size());
         List<Long> listIds = members.stream().map(UpdateFCMemberRequest::getMemberId).toList();
-        Map<Long, MemberEntity> listInDB = this.memberRepository.findAllByFcMemberIdIn(listIds).stream()
+        Map<Long, MemberEntity> listInDB = this.memberRepository.findAllById(listIds).stream()
                 .collect(Collectors.toMap(MemberEntity::getFcMemberId, member -> member));
 
         members.forEach(e -> {
