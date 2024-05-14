@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <property name="tableName" value="${prefixTableName}MATCH_MEMBER_GOAL" global="false" />
+
+    <changeSet id="${tableName}-1" author="suongnv">
+        <preConditions onFail="CONTINUE" onFailMessage="${tableName} existed">
+            <not>
+                <tableExists tableName="${tableName}" />
+            </not>
+        </preConditions>
+        <comment>
+            Create new ${tableName}
+        </comment>
+        <createTable tableName="${tableName}">
+            <column name="MEMBER_GOAL_ID" type="bigint"/>
+            <column name="MEMBER_ID" type="number" />
+            <column name="MATCH_ID" type="number" />
+            <column name="GOALS" type="number" />
+            <column name="GOALS_OG" type="number"/>
+            <column name="DESCRIPTION" type="varchar(2000)" />
+            <column name="STATUS" type="varchar(255)" />
+            <column name="CREATED_DATE" type="date" />
+            <column name="CREATED_BY" type="varchar(255)" />
+            <column name="UPDATED_DATE" type="date" />
+            <column name="UPDATED_BY" type="varchar(255)" />
+        </createTable>
+
+        <addPrimaryKey tableName="${tableName}" columnNames="MEMBER_GOAL_ID" />
+        <addAutoIncrement tableName="${tableName}" columnName="MEMBER_GOAL_ID" columnDataType="bigint"/>
+        <addNotNullConstraint tableName="${tableName}" columnName="MEMBER_ID" columnDataType="number"/>
+        <addNotNullConstraint tableName="${tableName}" columnName="MATCH_ID" columnDataType="number"/>
+        <addNotNullConstraint tableName="${tableName}" columnName="GOALS" columnDataType="number"/>
+        <addNotNullConstraint tableName="${tableName}" columnName="GOALS_OG" columnDataType="number"/>
+        <addNotNullConstraint tableName="${tableName}" columnName="STATUS" columnDataType="varchar(255)"/>
+    </changeSet>
+</databaseChangeLog>

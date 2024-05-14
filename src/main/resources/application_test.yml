@@ -14,10 +14,13 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     show-sql: true
   jackson:
     default-property-inclusion: always
+  liquibase:
+    user: ADMIN
+    password: ADMIN
 media:
   saver:
     active: local

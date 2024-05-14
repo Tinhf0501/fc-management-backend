@@ -18,13 +18,16 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     show-sql: false
     open-in-view: false
   jackson:
     default-property-inclusion: always
   mvc:
     time-zone: "Asia/Ho_Chi_Minh"
+  liquibase:
+    user: root
+    password: Tinh0501@@123
 media:
   saver:
     active: local

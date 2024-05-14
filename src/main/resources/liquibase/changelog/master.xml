@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <property name="prefixTableName" value="TB_" global="true" />
+    <includeAll path="./table" relativeToChangelogFile="true" />
+
+    <changeSet id="load-system-config-data" author="suongnv" runOnChange="true" runOrder="last">
+        <preConditions onFail="CONTINUE" onFailMessage="${prefixTableName}SYSTEM_CONFIG did not exist">
+            <tableExists tableName="${prefixTableName}SYSTEM_CONFIG"/>
+        </preConditions>
+        <comment>
+            Insert/Update TB_SYSTEM_CONFIG data
+        </comment>
+        <loadUpdateData
+                tableName="${prefixTableName}SYSTEM_CONFIG"
+                file="../data/system-config.csv"
+                primaryKey="CONFIG_ID"
+                relativeToChangelogFile="true"
+                separator=","
+                encoding="UTF-8"
+        />
+    </changeSet>
+
+    <changeSet id="load-role-data" author="suongnv" runOnChange="true" runOrder="last">
+        <preConditions onFail="CONTINUE" onFailMessage="${prefixTableName}ROLE did not exist">
+            <tableExists tableName="${prefixTableName}ROLE"/>
+        </preConditions>
+        <comment>
+            Insert/Update TB_ROLE data
+        </comment>
+        <loadUpdateData
+                tableName="${prefixTableName}ROLE"
+                file="../data/role.csv"
+                primaryKey="ROLE_ID"
+                relativeToChangelogFile="true"
+                separator=","
+                encoding="UTF-8"
+        />
+    </changeSet>
+
+</databaseChangeLog>
