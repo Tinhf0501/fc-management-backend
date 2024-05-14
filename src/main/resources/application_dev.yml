@@ -36,7 +36,7 @@ logging:
     - "/api/resources/**"
 security:
   cors:
-    url: http://localhost:4200
+    url: http://localhost:4200, https://tinhf0501.github.io
 springdoc:
   api-docs:
     path: /api-docs #default url doc api http://localhost:8080/v3/api-docs/
