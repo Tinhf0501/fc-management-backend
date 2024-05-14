@@ -1,25 +1,28 @@
 package com.luke.fcmanagement.module.member.impl;
 
 import com.luke.fcmanagement.constants.ErrorCode;
-import com.luke.fcmanagement.constants.FCStatus;
 import com.luke.fcmanagement.exception.BusinessException;
+import com.luke.fcmanagement.module.football_club.FCStatus;
 import com.luke.fcmanagement.module.football_club.request.CreateFCMemberRequest;
 import com.luke.fcmanagement.module.football_club.request.UpdateFCMemberRequest;
 import com.luke.fcmanagement.module.member.IMemberRepository;
 import com.luke.fcmanagement.module.member.IMemberService;
 import com.luke.fcmanagement.module.member.MemberEntity;
+import com.luke.fcmanagement.module.member.response.DetailMemberResponse;
 import com.luke.fcmanagement.module.resource.IResourceService;
+import com.luke.fcmanagement.module.resource.constant.KeyType;
 import com.luke.fcmanagement.module.resource.constant.MediaType;
-import com.luke.fcmanagement.module.resource.constant.TargetType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -38,7 +41,7 @@ public class MemberServiceImpl implements IMemberService {
             MemberEntity member = e.toEntity(fcId, FCStatus.INACTIVE);
             MemberEntity saveMem = this.memberRepository.save(member);
             if (Objects.nonNull(e.getAvatar())) {
-                this.resourceService.saveResource(e.getAvatar(), saveMem.getFcMemberId(), MediaType.IMAGE, TargetType.MEMBER);
+                this.resourceService.saveResource(e.getAvatar(), saveMem.getMemberId(), MediaType.IMAGE, KeyType.MEMBER);
             }
         });
     }
@@ -49,7 +52,7 @@ public class MemberServiceImpl implements IMemberService {
         if (CollectionUtils.isEmpty(memberIds)) return;
         log.info("delete fc member in batch by list ids size : {}", memberIds.size());
         this.memberRepository.deleteAllByIdInBatch(memberIds);
-        this.resourceService.deleteResourcesByTargetIdsAndTargetType(memberIds, TargetType.MEMBER);
+        this.resourceService.deleteResourcesByTargetIdsAndTargetType(memberIds, KeyType.MEMBER);
     }
 
     @Override
@@ -59,7 +62,7 @@ public class MemberServiceImpl implements IMemberService {
         log.info("save fc member-{} fcId-{}", members.size());
         List<Long> listIds = members.stream().map(UpdateFCMemberRequest::getMemberId).toList();
         Map<Long, MemberEntity> listInDB = this.memberRepository.findAllById(listIds).stream()
-                .collect(Collectors.toMap(MemberEntity::getFcMemberId, member -> member));
+                .collect(Collectors.toMap(MemberEntity::getMemberId, member -> member));
 
         members.forEach(e -> {
             MemberEntity memberOnDb = listInDB.get(e.getMemberId());
@@ -67,12 +70,12 @@ public class MemberServiceImpl implements IMemberService {
                 throw new BusinessException(ErrorCode.VALIDATE_FAIL);
             Long fcId = Objects.nonNull(e.getFcId()) ? e.getFcId() : memberOnDb.getFcId();
             MemberEntity member = e.toEntity(fcId, FCStatus.getStatus(memberOnDb.getStatus()));
-            member.setFcMemberId(e.getMemberId());
+            member.setMemberId(e.getMemberId());
             if (Objects.nonNull(e.getAvatar()) && Objects.isNull(e.getPathAvatarDel()))
                 throw new BusinessException(ErrorCode.VALIDATE_FAIL);
             Optional.ofNullable(e.getAvatar())
                     .ifPresent(
-                            avt -> this.resourceService.saveResource(e.getAvatar(), member.getFcMemberId(), MediaType.IMAGE, TargetType.MEMBER)
+                            avt -> this.resourceService.saveResource(e.getAvatar(), member.getMemberId(), MediaType.IMAGE, KeyType.MEMBER)
                     );
             Optional.ofNullable(e.getPathAvatarDel())
                     .ifPresent(
@@ -80,5 +83,11 @@ public class MemberServiceImpl implements IMemberService {
                     );
             this.memberRepository.save(member);
         });
+    }
+
+    @Override
+    public List<DetailMemberResponse> findAllByFcId(Long fcId) {
+        log.info("get fc member details by fcId-{}", fcId);
+        return this.memberRepository.getAllMemberDetailByFcIdAndKeyType(fcId, KeyType.MEMBER.getValue());
     }
 }

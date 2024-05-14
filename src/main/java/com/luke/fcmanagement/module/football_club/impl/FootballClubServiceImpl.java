@@ -1,7 +1,7 @@
 package com.luke.fcmanagement.module.football_club.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.luke.fcmanagement.constants.ErrorCode;
-import com.luke.fcmanagement.constants.FCStatus;
 import com.luke.fcmanagement.constants.FieldConstant;
 import com.luke.fcmanagement.constants.Message;
 import com.luke.fcmanagement.exception.BusinessException;
@@ -9,17 +9,20 @@ import com.luke.fcmanagement.model.ApiBody;
 import com.luke.fcmanagement.model.ApiResponse;
 import com.luke.fcmanagement.model.SearchRequest;
 import com.luke.fcmanagement.model.SearchResponse;
+import com.luke.fcmanagement.module.football_club.FCStatus;
 import com.luke.fcmanagement.module.football_club.FootballClubEntity;
 import com.luke.fcmanagement.module.football_club.IFootballClubRepository;
 import com.luke.fcmanagement.module.football_club.IFootballClubService;
 import com.luke.fcmanagement.module.football_club.request.CreateFCRequest;
 import com.luke.fcmanagement.module.football_club.request.SearchFcRequest;
 import com.luke.fcmanagement.module.football_club.request.UpdateFCRequest;
+import com.luke.fcmanagement.module.football_club.response.DetailFCResponse;
 import com.luke.fcmanagement.module.football_club.response.ISearchFCResponse;
 import com.luke.fcmanagement.module.member.IMemberService;
+import com.luke.fcmanagement.module.member.response.DetailMemberResponse;
 import com.luke.fcmanagement.module.resource.IResourceService;
+import com.luke.fcmanagement.module.resource.constant.KeyType;
 import com.luke.fcmanagement.module.resource.constant.MediaType;
-import com.luke.fcmanagement.module.resource.constant.TargetType;
 import com.luke.fcmanagement.utils.CommonUtils;
 import com.luke.fcmanagement.utils.JSON;
 import lombok.RequiredArgsConstructor;
@@ -32,10 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 
-import java.util.Collection;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Stream;
 
 @Service
@@ -46,6 +46,7 @@ public class FootballClubServiceImpl implements IFootballClubService {
 
     private final IMemberService memberService;
     private final IResourceService resourceService;
+    private final ObjectMapper mapper;
 
     @Override
     @Transactional(rollbackFor = Throwable.class)
@@ -70,10 +71,10 @@ public class FootballClubServiceImpl implements IFootballClubService {
 
         // * save logo FC
         Optional.ofNullable(request.getLogo())
-                .ifPresent(logo -> this.resourceService.saveResource(logo, fcSaved.getFcId(), MediaType.IMAGE, TargetType.FC));
+                .ifPresent(logo -> this.resourceService.saveResource(logo, fcSaved.getFcId(), MediaType.LOGO, KeyType.FC));
 
         // * save media FC
-        Optional.ofNullable(request.getMedia()).ifPresent(medias -> this.resourceService.saveBathResource(medias, fcSaved.getFcId(), TargetType.FC));
+        Optional.ofNullable(request.getMedia()).ifPresent(medias -> this.resourceService.saveBathResource(medias, fcSaved.getFcId(), KeyType.FC));
 
         ApiBody apiBody = new ApiBody();
         apiBody.setMessage(Message.CREATE_FC_SUCCESS);
@@ -105,7 +106,7 @@ public class FootballClubServiceImpl implements IFootballClubService {
         Optional.ofNullable(request.getPathLogoDel())
                 .ifPresent(logo -> this.resourceService.deleteResource(logo));
         Optional.ofNullable(request.getLogo())
-                .ifPresent(logo -> this.resourceService.saveResource(logo, fcSaved.getFcId(), MediaType.IMAGE, TargetType.FC));
+                .ifPresent(logo -> this.resourceService.saveResource(logo, fcSaved.getFcId(), MediaType.LOGO, KeyType.FC));
 
         // * xóa list member
         Optional.ofNullable(request.getFcMemberIdsDelete()).ifPresent(memberId -> this.memberService.batchDeleteFcMemberById(memberId));
@@ -137,6 +138,22 @@ public class FootballClubServiceImpl implements IFootballClubService {
         result.setPage(request.getPageNo());
         result.setPageSize(request.getPageSize());
         apiBody.put(FieldConstant.DATA, result);
+        return ApiResponse.ok(apiBody);
+    }
+
+    @Override
+    public ApiResponse detail(Long fcId) {
+        Optional<FootballClubEntity> optionalFC = this.footballClubRepository.findById(fcId);
+        if (!optionalFC.isPresent())
+            throw new BusinessException(ErrorCode.NOT_FOUND_RECORD);
+        DetailFCResponse fcDetails = this.footballClubRepository.findDetailFcByFcIdAndKeyTypeAndMediaType(fcId, KeyType.FC.getValue(), MediaType.LOGO.getValue());
+        List<String> listFcResources = this.resourceService.findResourcesByKeyIdAndKeyType(fcId, KeyType.FC.getValue());
+        fcDetails.setListResource(listFcResources);
+        List<DetailMemberResponse> listMembers = this.memberService.findAllByFcId(fcId);
+        fcDetails.setListMembers(listMembers);
+        ApiBody apiBody = new ApiBody();
+        apiBody.setMessage(Message.GET_DETAIL_FC_SUCCESS);
+        apiBody.put(FieldConstant.DATA, fcDetails);
         return ApiResponse.ok(apiBody);
     }
 }

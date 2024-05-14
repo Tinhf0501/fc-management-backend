@@ -1,7 +1,7 @@
 package com.luke.fcmanagement.module.job.delete_resource;
 
-import com.luke.fcmanagement.constants.JobType;
 import com.luke.fcmanagement.module.job.Job;
+import com.luke.fcmanagement.module.job.JobType;
 import lombok.*;
 
 @Getter

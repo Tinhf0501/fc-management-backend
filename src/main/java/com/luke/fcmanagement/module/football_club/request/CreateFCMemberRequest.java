@@ -1,7 +1,7 @@
 package com.luke.fcmanagement.module.football_club.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.luke.fcmanagement.constants.FCStatus;
+import com.luke.fcmanagement.module.football_club.FCStatus;
 import com.luke.fcmanagement.module.member.MemberEntity;
 import com.luke.fcmanagement.module.resource.annotation.ResourceType;
 import com.luke.fcmanagement.module.resource.constant.MediaType;

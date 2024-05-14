@@ -39,4 +39,10 @@ public class FootballClubController {
     public ApiResponse update(@Valid UpdateFCRequest request, BindingResult bindingResult) throws BusinessException, BindException {
         return footballClubService.updateFC(request, bindingResult);
     }
+
+    @CaptureHistory(ActionType.DETAIL_FC)
+    @GetMapping("/detail")
+    public ApiResponse details(@RequestParam("fcId") Long fcId) throws BusinessException {
+        return footballClubService.detail(fcId);
+    }
 }

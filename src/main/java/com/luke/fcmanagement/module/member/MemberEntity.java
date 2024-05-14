@@ -20,8 +20,8 @@ public class MemberEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native")
-    @Column(name = "FC_MEMBER_ID", nullable = false)
-    private Long fcMemberId;
+    @Column(name = "MEMBER_ID", nullable = false)
+    private Long memberId;
 
     @Column(name = "USER_ID")
     private Long userId;

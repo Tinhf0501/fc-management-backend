@@ -1,6 +1,7 @@
 package com.luke.fcmanagement.module.football_club;
 
 import com.luke.fcmanagement.module.football_club.request.SearchFcRequest;
+import com.luke.fcmanagement.module.football_club.response.DetailFCResponse;
 import com.luke.fcmanagement.module.football_club.response.ISearchFCResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,7 +20,7 @@ public interface IFootballClubRepository extends JpaRepository<FootballClubEntit
             "f.updatedBy as updatedBy, " +
             "f.status as status, " +
             "f.slug as slug, " +
-            "(select count(m.fcMemberId) from MemberEntity m where m.fcId = f.fcId) as totalMembers" +
+            "(select count(m.memberId) from MemberEntity m where m.fcId = f.fcId) as totalMembers" +
             " from FootballClubEntity f " +
             "where (:#{#params.fcName} is null or f.fcName like concat('%',:#{#params.fcName},'%')) " +
             "and (:#{#params.fcStatus} is null or f.status = :#{#params.fcStatus}) " +
@@ -30,4 +31,10 @@ public interface IFootballClubRepository extends JpaRepository<FootballClubEntit
             @Param("params") SearchFcRequest request,
             Pageable pageable
     );
+
+    @Query(value = "select new com.luke.fcmanagement.module.football_club.response.DetailFCResponse(f.fcId,f.fcName,f.description,f.status,f.slug,f.createdDate,r.path) " +
+            "from FootballClubEntity f " +
+            "inner join ResourceEntity r on f.fcId=r.keyId " +
+            "where f.fcId=:fcId and r.keyId=:keyType and r.mediaType=:mediaType")
+    DetailFCResponse findDetailFcByFcIdAndKeyTypeAndMediaType(@Param("fcId") Long fcId, @Param("keyType") Integer keyType, @Param("mediaType") String mediaType);
 }
