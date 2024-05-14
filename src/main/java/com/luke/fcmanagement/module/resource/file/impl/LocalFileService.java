@@ -20,9 +20,9 @@ public class LocalFileService implements IFileService {
     private final Environment environment;
 
     @Override
-    public String saveFile(MultipartFile file, MediaType fcMediaType, String fileName) {
+    public String saveFile(MultipartFile file, MediaType mediaType, String fileName) {
         try {
-            String folderPath = this.environment.getProperty(fcMediaType.getFolderEnvKey());
+            String folderPath = this.environment.getProperty(mediaType.getFolderEnvKey());
             String pathSave = folderPath + fileName;
             final File f = new File(this.localSaverFileConfig.getAbsolutePath() + pathSave);
             if (!f.exists()) {

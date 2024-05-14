@@ -13,5 +13,8 @@ public interface IFootballClubService {
     ApiResponse createFC(CreateFCRequest request, BindingResult bindingResult) throws BusinessException, BindException;
 
     ApiResponse updateFC(UpdateFCRequest request, BindingResult bindingResult) throws BusinessException, BindException;
+
     ApiResponse searchFC(SearchRequest<SearchFcRequest> request) throws BusinessException;
+
+    ApiResponse detail(Long fcId);
 }

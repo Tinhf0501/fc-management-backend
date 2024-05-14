@@ -30,11 +30,11 @@ public class ResourceEntity extends BaseEntity {
 
     // * keyID: id FC, Member, ....
     @Column(name = "KEY_ID", nullable = false)
-    private Long targetId;
+    private Long keyId;
 
     // * keyType: FC, Mem, ...
     @Column(name = "KEY_TYPE", nullable = false)
-    private Integer targetType;
+    private Integer keyType;
 
     @Column(name = "DESCRIPTION", length = 2000)
     private String description;

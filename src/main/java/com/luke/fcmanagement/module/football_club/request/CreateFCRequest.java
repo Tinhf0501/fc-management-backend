@@ -5,6 +5,7 @@ import com.luke.fcmanagement.module.resource.annotation.BatchResourceType;
 import com.luke.fcmanagement.module.resource.annotation.ResourceType;
 import com.luke.fcmanagement.module.resource.constant.MediaType;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,6 +30,7 @@ public class CreateFCRequest {
     private List<CreateFCMemberRequest> fcMembers;
 
     @JsonIgnore
+    @NotNull(message = "Logo FC không được bỏ trống")
     @ResourceType(value = MediaType.IMAGE, message = "File logo phải là file .png hoặc .jpg(.jpeg)")
     private MultipartFile logo;
 

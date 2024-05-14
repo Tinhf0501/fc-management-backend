@@ -8,8 +8,8 @@ import com.luke.fcmanagement.module.job.delete_resource.DeleteResourceJob;
 import com.luke.fcmanagement.module.resource.IResourceRepository;
 import com.luke.fcmanagement.module.resource.IResourceService;
 import com.luke.fcmanagement.module.resource.ResourceEntity;
+import com.luke.fcmanagement.module.resource.constant.KeyType;
 import com.luke.fcmanagement.module.resource.constant.MediaType;
-import com.luke.fcmanagement.module.resource.constant.TargetType;
 import com.luke.fcmanagement.module.resource.file.FileUtils;
 import com.luke.fcmanagement.module.resource.file.IFileService;
 import lombok.RequiredArgsConstructor;
@@ -41,7 +41,7 @@ public class ResourceServiceImpl implements IResourceService {
 
     @Override
     @Transactional(rollbackFor = Throwable.class)
-    public void saveBathResource(List<MultipartFile> resources, Long targetId, TargetType targetType) {
+    public void saveBathResource(List<MultipartFile> resources, Long targetId, KeyType targetType) {
         log.info("save resource batch :{} files of target id: {}", resources.size(), targetId);
         if (CollectionUtils.isEmpty(resources)) return;
         for (MultipartFile resource : resources) {
@@ -56,28 +56,20 @@ public class ResourceServiceImpl implements IResourceService {
     }
 
     @Transactional(rollbackFor = Throwable.class)
-    public void saveResource(MultipartFile resource, long targetId, MediaType fcMediaType, String fileName, TargetType targetType) {
-        if (Objects.isNull(resource) || Objects.isNull(fcMediaType)) return;
-        log.info("save resource {} name: {}", fcMediaType.getDisplay(), fileName);
-        String pathSave = this.fileService.saveFile(resource, fcMediaType, fileName);
+    public void saveResource(MultipartFile resource, long targetId, MediaType mediaType, String fileName, KeyType targetType) {
+        if (Objects.isNull(resource) || Objects.isNull(mediaType)) return;
+        log.info("save resource {} name: {}", mediaType.getDisplay(), fileName);
+        String pathSave = this.fileService.saveFile(resource, mediaType, fileName);
         ResourceEntity logoFC = ResourceEntity
                 .builder()
                 .path(pathSave)
-                .targetId(targetId)
-                .mediaType(fcMediaType.getValue())
-                .description(fcMediaType.getDisplay())
-                .targetType(targetType.getValue())
+                .keyId(targetId)
+                .mediaType(mediaType.getValue())
+                .description(mediaType.getDisplay())
+                .keyType(targetType.getValue())
                 .provider(provider)
                 .build();
         resourceRepository.save(logoFC);
-    }
-
-    @Override
-    @Transactional(rollbackFor = Throwable.class)
-    public void batchDeleteResourceById(List<Long> ids) {
-        log.info("delete fc resource batch :{} id files", ids.size());
-        if (CollectionUtils.isEmpty(ids)) return;
-        this.resourceRepository.deleteAllByIdInBatch(ids);
     }
 
     @Override
@@ -95,9 +87,9 @@ public class ResourceServiceImpl implements IResourceService {
 
     @Override
     @Transactional(rollbackFor = Throwable.class)
-    public void deleteResourcesByTargetIdsAndTargetType(List<Long> targetIds, TargetType targetType) {
-        log.info("delete resource with by list targetIds size: {} and target type :{}", targetIds.size(), targetType.getDisplay());
-        List<ResourceEntity> list = resourceRepository.findResourceEntitiesByTargetIdInAndTargetType(targetIds, targetType.getValue());
+    public void deleteResourcesByTargetIdsAndTargetType(List<Long> targetIds, KeyType targetType) {
+        log.info("delete resource by list targetIds size: {} and target type :{}", targetIds.size(), targetType.getDisplay());
+        List<ResourceEntity> list = resourceRepository.findResourceEntitiesByKeyIdInAndKeyType(targetIds, targetType.getValue());
         List<String> paths = list.stream().map(ResourceEntity::getPath).toList();
         Stream.ofNullable(paths).flatMap(Collection::stream).forEach(p -> {
                     String pathDelLocal = p.replace(this.localSaverFileConfig.getHost(), this.localSaverFileConfig.getAbsolutePath()).replace("/", File.separator);
@@ -107,6 +99,18 @@ public class ResourceServiceImpl implements IResourceService {
                     this.jobService.createJob(deleteResourceJob);
                 }
         );
+    }
+
+    @Override
+    public List<String> findResourcesByKeyIdAndKeyType(Long keyId, Integer keyType) {
+        log.info("get resource by keyId: {}", keyId);
+        return this.resourceRepository.findByKeyId(keyId, keyType);
+    }
+
+    @Override
+    public String getPathByKeyTypeAndKeyIdAndMediaType(Integer keyType, Long keyId, String mediaType) {
+        log.info("get path by keyId: {} - keyType: {} - mediaType: {}", keyId, keyType, mediaType);
+        return null;
     }
 
 

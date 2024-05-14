@@ -9,6 +9,7 @@ import lombok.Getter;
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum MediaType {
     IMAGE("IMAGE", "Image", "media.img-path"),
+    LOGO("LOGO", "LOGO", "media.img-path"),
     VIDEO("VIDEO", "Video", "media.video-path"),
     UNKNOWN("UNKNOWN", "Không xác định", "");
 

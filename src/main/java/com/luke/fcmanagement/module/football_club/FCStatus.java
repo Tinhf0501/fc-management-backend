@@ -1,4 +1,4 @@
-package com.luke.fcmanagement.constants;
+package com.luke.fcmanagement.module.football_club;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
