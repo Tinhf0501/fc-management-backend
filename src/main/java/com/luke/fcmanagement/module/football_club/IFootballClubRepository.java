@@ -35,6 +35,6 @@ public interface IFootballClubRepository extends JpaRepository<FootballClubEntit
     @Query(value = "select new com.luke.fcmanagement.module.football_club.response.DetailFCResponse(f.fcId,f.fcName,f.description,f.status,f.slug,f.createdDate,r.path) " +
             "from FootballClubEntity f " +
             "inner join ResourceEntity r on f.fcId=r.keyId " +
-            "where f.fcId=:fcId and r.keyId=:keyType and r.mediaType=:mediaType")
+            "where f.fcId=:fcId and r.keyType=:keyType and r.mediaType=:mediaType")
     DetailFCResponse findDetailFcByFcIdAndKeyTypeAndMediaType(@Param("fcId") Long fcId, @Param("keyType") Integer keyType, @Param("mediaType") String mediaType);
 }
