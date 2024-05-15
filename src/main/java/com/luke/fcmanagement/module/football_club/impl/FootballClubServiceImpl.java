@@ -100,19 +100,19 @@ public class FootballClubServiceImpl implements IFootballClubService {
         this.memberService.updateMember(request.getFcMemberUpdate());
 
         // * save logo FC
-        if (Objects.nonNull(request.getLogo()) && Objects.isNull(request.getPathLogoDel()))
-            throw new BusinessException(ErrorCode.VALIDATE_FAIL);
-        // * xóa logo cũ
-        Optional.ofNullable(request.getPathLogoDel())
-                .ifPresent(logo -> this.resourceService.deleteResource(logo));
-        Optional.ofNullable(request.getLogo())
-                .ifPresent(logo -> this.resourceService.saveResource(logo, fcSaved.getFcId(), MediaType.LOGO, KeyType.FC));
+        Optional.ofNullable(request.getLogo()).ifPresent(
+                logo -> {
+                    // * xóa logo cũ
+                    this.resourceService.deleteResourcesByKeyIdAndKeyTypeAndMediaType(fcSaved.getFcId(), KeyType.FC.getValue(), MediaType.LOGO.getValue());
+                    this.resourceService.saveResource(logo, fcSaved.getFcId(), MediaType.LOGO, KeyType.FC);
+                }
+        );
 
         // * xóa list member
-        Optional.ofNullable(request.getFcMemberIdsDelete()).ifPresent(memberId -> this.memberService.batchDeleteFcMemberById(memberId));
+        Optional.ofNullable(request.getFcMemberIdsDelete()).ifPresent(this.memberService::batchDeleteFcMemberById);
 
         // * xóa list media
-        Stream.ofNullable(request.getPathMediaDelete()).flatMap(Collection::stream).forEach(path -> this.resourceService.deleteResource(path));
+        Stream.ofNullable(request.getPathMediaDelete()).flatMap(Collection::stream).forEach(this.resourceService::deleteResourceByPath);
 
         ApiBody apiBody = new ApiBody();
         apiBody.setMessage(Message.UPDATE_FC_SUCCESS);
@@ -143,10 +143,9 @@ public class FootballClubServiceImpl implements IFootballClubService {
 
     @Override
     public ApiResponse detail(Long fcId) {
-        Optional<FootballClubEntity> optionalFC = this.footballClubRepository.findById(fcId);
-        if (!optionalFC.isPresent())
-            throw new BusinessException(ErrorCode.NOT_FOUND_RECORD);
         DetailFCResponse fcDetails = this.footballClubRepository.findDetailFcByFcIdAndKeyTypeAndMediaType(fcId, KeyType.FC.getValue(), MediaType.LOGO.getValue());
+        if (Objects.isNull(fcDetails))
+            throw new BusinessException(ErrorCode.NOT_FOUND_RECORD);
         List<String> listFcResources = this.resourceService.findResourcesByKeyIdAndKeyType(fcId, KeyType.FC.getValue());
         fcDetails.setListResource(listFcResources);
         List<DetailMemberResponse> listMembers = this.memberService.findAllByFcId(fcId);

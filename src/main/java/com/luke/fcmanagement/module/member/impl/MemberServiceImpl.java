@@ -3,11 +3,11 @@ package com.luke.fcmanagement.module.member.impl;
 import com.luke.fcmanagement.constants.ErrorCode;
 import com.luke.fcmanagement.exception.BusinessException;
 import com.luke.fcmanagement.module.football_club.FCStatus;
-import com.luke.fcmanagement.module.football_club.request.CreateFCMemberRequest;
-import com.luke.fcmanagement.module.football_club.request.UpdateFCMemberRequest;
 import com.luke.fcmanagement.module.member.IMemberRepository;
 import com.luke.fcmanagement.module.member.IMemberService;
 import com.luke.fcmanagement.module.member.MemberEntity;
+import com.luke.fcmanagement.module.member.request.CreateFCMemberRequest;
+import com.luke.fcmanagement.module.member.request.UpdateFCMemberRequest;
 import com.luke.fcmanagement.module.member.response.DetailMemberResponse;
 import com.luke.fcmanagement.module.resource.IResourceService;
 import com.luke.fcmanagement.module.resource.constant.KeyType;
@@ -63,7 +63,6 @@ public class MemberServiceImpl implements IMemberService {
         List<Long> listIds = members.stream().map(UpdateFCMemberRequest::getMemberId).toList();
         Map<Long, MemberEntity> listInDB = this.memberRepository.findAllById(listIds).stream()
                 .collect(Collectors.toMap(MemberEntity::getMemberId, member -> member));
-
         members.forEach(e -> {
             MemberEntity memberOnDb = listInDB.get(e.getMemberId());
             if (Objects.isNull(memberOnDb))
@@ -71,16 +70,13 @@ public class MemberServiceImpl implements IMemberService {
             Long fcId = Objects.nonNull(e.getFcId()) ? e.getFcId() : memberOnDb.getFcId();
             MemberEntity member = e.toEntity(fcId, FCStatus.getStatus(memberOnDb.getStatus()));
             member.setMemberId(e.getMemberId());
-            if (Objects.nonNull(e.getAvatar()) && Objects.isNull(e.getPathAvatarDel()))
-                throw new BusinessException(ErrorCode.VALIDATE_FAIL);
-            Optional.ofNullable(e.getAvatar())
-                    .ifPresent(
-                            avt -> this.resourceService.saveResource(e.getAvatar(), member.getMemberId(), MediaType.IMAGE, KeyType.MEMBER)
-                    );
-            Optional.ofNullable(e.getPathAvatarDel())
-                    .ifPresent(
-                            path -> this.resourceService.deleteResource(path)
-                    );
+            Optional.ofNullable(e.getAvatar()).ifPresent(
+                    avt -> {
+                        // * xóa avt cũ
+                        this.resourceService.deleteResourcesByKeyIdAndKeyTypeAndMediaType(e.getMemberId(), KeyType.MEMBER.getValue(), MediaType.IMAGE.getValue());
+                        this.resourceService.saveResource(e.getAvatar(), member.getMemberId(), MediaType.IMAGE, KeyType.MEMBER);
+                    }
+            );
             this.memberRepository.save(member);
         });
     }

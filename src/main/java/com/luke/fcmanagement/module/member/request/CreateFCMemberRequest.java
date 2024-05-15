@@ -1,4 +1,4 @@
-package com.luke.fcmanagement.module.football_club.request;
+package com.luke.fcmanagement.module.member.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.luke.fcmanagement.module.football_club.FCStatus;

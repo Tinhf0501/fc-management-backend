@@ -1,4 +1,4 @@
-package com.luke.fcmanagement.module.job;
+package com.luke.fcmanagement.module.job.constants;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
