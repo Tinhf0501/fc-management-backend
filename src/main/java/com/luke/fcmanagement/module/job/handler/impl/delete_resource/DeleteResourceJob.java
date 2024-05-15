@@ -1,4 +1,4 @@
-package com.luke.fcmanagement.module.job.delete_resource;
+package com.luke.fcmanagement.module.job.handler.impl.delete_resource;
 
 import com.luke.fcmanagement.module.job.Job;
 import com.luke.fcmanagement.module.job.constants.JobType;

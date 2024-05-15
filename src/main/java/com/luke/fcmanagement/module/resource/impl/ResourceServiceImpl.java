@@ -4,7 +4,7 @@ import com.luke.fcmanagement.config.LocalSaverFileConfig;
 import com.luke.fcmanagement.constants.ErrorCode;
 import com.luke.fcmanagement.exception.BusinessException;
 import com.luke.fcmanagement.module.job.IJobService;
-import com.luke.fcmanagement.module.job.delete_resource.DeleteResourceJob;
+import com.luke.fcmanagement.module.job.handler.impl.delete_resource.DeleteResourceJob;
 import com.luke.fcmanagement.module.resource.IResourceRepository;
 import com.luke.fcmanagement.module.resource.IResourceService;
 import com.luke.fcmanagement.module.resource.ResourceEntity;

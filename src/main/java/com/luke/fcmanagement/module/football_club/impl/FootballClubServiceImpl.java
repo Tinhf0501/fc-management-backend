@@ -35,10 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Stream;
 
 @Service
@@ -112,10 +109,10 @@ public class FootballClubServiceImpl implements IFootballClubService {
         );
 
         // * xóa list member
-        Optional.ofNullable(request.getFcMemberIdsDelete()).ifPresent(memberIds -> this.memberService.batchDeleteFcMemberById(memberIds));
+        Optional.ofNullable(request.getFcMemberIdsDelete()).ifPresent(this.memberService::batchDeleteFcMemberById);
 
         // * xóa list media
-        Stream.ofNullable(request.getPathMediaDelete()).flatMap(Collection::stream).forEach(path -> this.resourceService.deleteResourceByPath(path));
+        Stream.ofNullable(request.getPathMediaDelete()).flatMap(Collection::stream).forEach(this.resourceService::deleteResourceByPath);
 
         ApiBody apiBody = new ApiBody();
         apiBody.setMessage(Message.UPDATE_FC_SUCCESS);
@@ -146,9 +143,9 @@ public class FootballClubServiceImpl implements IFootballClubService {
 
     @Override
     public ApiResponse detail(Long fcId) {
-        Optional<FootballClubEntity> optionalFC = this.footballClubRepository.findById(fcId);
-        optionalFC.orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_RECORD));
         DetailFCResponse fcDetails = this.footballClubRepository.findDetailFcByFcIdAndKeyTypeAndMediaType(fcId, KeyType.FC.getValue(), MediaType.LOGO.getValue());
+        if (Objects.isNull(fcDetails))
+            throw new BusinessException(ErrorCode.NOT_FOUND_RECORD);
         List<String> listFcResources = this.resourceService.findResourcesByKeyIdAndKeyType(fcId, KeyType.FC.getValue());
         fcDetails.setListResource(listFcResources);
         List<DetailMemberResponse> listMembers = this.memberService.findAllByFcId(fcId);
