@@ -18,6 +18,9 @@ spring:
     show-sql: false
   jackson:
     default-property-inclusion: non_null
+  liquibase:
+    user: ADMIN
+    password: ADMIN
 media:
   saver:
     active: local

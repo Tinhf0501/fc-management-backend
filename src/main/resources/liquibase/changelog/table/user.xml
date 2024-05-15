@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <property name="tableName" value="${prefixTableName}USER" global="false" />
+
+    <changeSet id="${tableName}-1" author="suongnv">
+        <preConditions onFail="CONTINUE" onFailMessage="${tableName} existed">
+            <not>
+                <tableExists tableName="${tableName}" />
+            </not>
+        </preConditions>
+        <comment>
+            Create new ${tableName}
+        </comment>
+        <createTable tableName="${tableName}">
+            <column name="USER_ID" type="bigint"/>
+            <column name="USERNAME" type="varchar(255)" />
+            <column name="PASSWORD" type="varchar(1000)" />
+            <column name="EMAIL" type="varchar(255)" />
+            <column name="PROVIDER" type="varchar(255)" />
+            <column name="FULL_NAME" type="varchar(255)" />
+            <column name="STATUS" type="varchar(255)" />
+            <column name="AVATAR" type="varchar(2000)" />
+            <column name="CREATED_DATE" type="date" />
+            <column name="CREATED_BY" type="varchar(255)" />
+            <column name="UPDATED_DATE" type="date" />
+            <column name="UPDATED_BY" type="varchar(255)" />
+        </createTable>
+
+        <addPrimaryKey tableName="${tableName}" columnNames="USER_ID" />
+        <addAutoIncrement tableName="${tableName}" columnName="USER_ID" columnDataType="bigint" />
+        <addNotNullConstraint tableName="${tableName}" columnName="USERNAME" columnDataType="varchar(255)" />
+        <addNotNullConstraint tableName="${tableName}" columnName="PASSWORD" columnDataType="varchar(1000)"/>
+        <addNotNullConstraint tableName="${tableName}" columnName="FULL_NAME" columnDataType="varchar(255)"/>
+        <addNotNullConstraint tableName="${tableName}" columnName="STATUS" columnDataType="varchar(255)"/>
+    </changeSet>
+</databaseChangeLog>

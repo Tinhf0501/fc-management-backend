@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <property name="tableName" value="${prefixTableName}HIS_LOG" global="false" />
+
+    <changeSet id="${tableName}-1" author="suongnv">
+        <preConditions onFail="CONTINUE" onFailMessage="${tableName} existed">
+            <not>
+                <tableExists tableName="${tableName}" />
+            </not>
+        </preConditions>
+        <comment>
+            Create new ${tableName}
+        </comment>
+        <createTable tableName="${tableName}">
+            <column name="LOG_ID" type="bigint"/>
+            <column name="STATUS" type="varchar(255)" />
+            <column name="ACTION" type="varchar(255)" />
+            <column name="TRACE_ID" type="varchar(100)" />
+            <column name="API_PATH" type="varchar(100)" />
+            <column name="CREATED_DATE" type="date" />
+            <column name="CREATED_BY" type="varchar(255)" />
+            <column name="UPDATED_DATE" type="date" />
+            <column name="UPDATED_BY" type="varchar(255)" />
+        </createTable>
+        <addPrimaryKey tableName="${tableName}" columnNames="LOG_ID" />
+        <addAutoIncrement tableName="${tableName}" columnName="LOG_ID" columnDataType="bigint"/>
+        <addNotNullConstraint tableName="${tableName}" columnName="STATUS" columnDataType="varchar(255)"/>
+        <addNotNullConstraint tableName="${tableName}" columnName="ACTION" columnDataType="varchar(255)"/>
+        <addNotNullConstraint tableName="${tableName}" columnName="TRACE_ID" columnDataType="varchar(100)"/>
+        <addNotNullConstraint tableName="${tableName}" columnName="API_PATH" columnDataType="varchar(100)"/>
+    </changeSet>
+</databaseChangeLog>

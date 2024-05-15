@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    
+    <property name="tableName" value="${prefixTableName}JOB" global="false" />
+
+    <property name="lobType" value="LONGTEXT" dbms="mysql" />
+
+    <changeSet id="${tableName}-1" author="suongnv">
+        <preConditions onFail="CONTINUE" onFailMessage="${tableName} existed">
+            <not>
+                <tableExists tableName="${tableName}"/>
+            </not>
+        </preConditions>
+        <comment>
+            Create new ${tableName}
+        </comment>
+        <createTable tableName="${tableName}">
+            <column name="JOB_ID" type="bigint"/>
+            <column name="JOB_VALUE" type="${lobType}" />
+            <column name="MESSAGE" type="varchar(255)" />
+            <column name="JOB_TYPE" type="varchar(255)" />
+            <column name="CREATED_DATE" type="date" />
+            <column name="CREATED_BY" type="varchar(255)" />
+            <column name="UPDATED_DATE" type="date" />
+            <column name="UPDATED_BY" type="varchar(255)" />
+        </createTable>
+
+        <addPrimaryKey tableName="${tableName}" columnNames="JOB_ID" />
+        <addAutoIncrement tableName="${tableName}" columnName="JOB_ID" columnDataType="bigint" />
+    </changeSet>
+</databaseChangeLog>
