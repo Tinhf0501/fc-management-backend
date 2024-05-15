@@ -14,5 +14,7 @@ public interface IResourceRepository extends JpaRepository<ResourceEntity, Long>
 
     @Query(value = "select r.path " +
             "from ResourceEntity r where r.keyId=:keyId and r.keyType=:keyType")
-    List<String> findByKeyId(@Param("keyId") Long keyId, @Param("keyType") Integer keyType);
+    List<String> findByKeyIdAndKeyType(@Param("keyId") Long keyId, @Param("keyType") Integer keyType);
+
+    List<ResourceEntity> findResourceEntitiesByKeyIdAndKeyTypeAndMediaType(Long keyId, Integer keyType, String mediaType);
 }

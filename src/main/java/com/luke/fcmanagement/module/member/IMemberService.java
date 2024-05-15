@@ -1,7 +1,7 @@
 package com.luke.fcmanagement.module.member;
 
-import com.luke.fcmanagement.module.football_club.request.CreateFCMemberRequest;
-import com.luke.fcmanagement.module.football_club.request.UpdateFCMemberRequest;
+import com.luke.fcmanagement.module.member.request.CreateFCMemberRequest;
+import com.luke.fcmanagement.module.member.request.UpdateFCMemberRequest;
 import com.luke.fcmanagement.module.member.response.DetailMemberResponse;
 
 import java.util.List;

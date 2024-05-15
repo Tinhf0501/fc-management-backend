@@ -1,4 +1,4 @@
-package com.luke.fcmanagement.module.football_club.request;
+package com.luke.fcmanagement.module.member.request;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -13,8 +13,5 @@ import lombok.Setter;
 public class UpdateFCMemberRequest extends CreateFCMemberRequest {
     @NotNull(message = "ID của thành viên không được bỏ trống")
     private Long memberId;
-
     private Long fcId;
-
-    private String pathAvatarDel;
 }
