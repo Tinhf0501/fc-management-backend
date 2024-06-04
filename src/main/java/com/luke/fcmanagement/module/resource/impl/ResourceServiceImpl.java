@@ -4,7 +4,7 @@ import com.luke.fcmanagement.config.LocalSaverFileConfig;
 import com.luke.fcmanagement.constants.ErrorCode;
 import com.luke.fcmanagement.exception.BusinessException;
 import com.luke.fcmanagement.module.job.IJobService;
-import com.luke.fcmanagement.module.job.handler.impl.delete_resource.DeleteResourceJob;
+import com.luke.fcmanagement.module.job.handler.impl.delete_resource.DeleteResource;
 import com.luke.fcmanagement.module.resource.IResourceRepository;
 import com.luke.fcmanagement.module.resource.IResourceService;
 import com.luke.fcmanagement.module.resource.ResourceEntity;
@@ -81,10 +81,10 @@ public class ResourceServiceImpl implements IResourceService {
         String pathDelLocal = path.replace(this.localSaverFileConfig.getHost(), this.localSaverFileConfig.getAbsolutePath()).replace("/", File.separator);
         ResourceEntity resource = this.resourceRepository.findResourceEntityByPath(path).orElseThrow(() -> new BusinessException(ErrorCode.VALIDATE_FAIL));
         this.resourceRepository.delete(resource);
-        DeleteResourceJob deleteResourceJob = DeleteResourceJob.builder()
+        DeleteResource deleteResource = DeleteResource.builder()
                 .path(pathDelLocal)
                 .build();
-        this.jobService.createJob(deleteResourceJob);
+        this.jobService.createJob(deleteResource);
     }
 
     @Override
@@ -109,17 +109,17 @@ public class ResourceServiceImpl implements IResourceService {
         deleteListReSources(list);
     }
 
-    private void deleteListReSources(List<ResourceEntity> list){
+    private void deleteListReSources(List<ResourceEntity> list) {
         if (list.isEmpty())
             return;
         List<String> paths = list.stream().map(ResourceEntity::getPath).toList();
         this.resourceRepository.deleteAllInBatch(list);
         Stream.ofNullable(paths).flatMap(Collection::stream).forEach(p -> {
                     String pathDelLocal = p.replace(this.localSaverFileConfig.getHost(), this.localSaverFileConfig.getAbsolutePath()).replace("/", File.separator);
-                    DeleteResourceJob deleteResourceJob = DeleteResourceJob.builder()
+                    DeleteResource deleteResource = DeleteResource.builder()
                             .path(pathDelLocal)
                             .build();
-                    this.jobService.createJob(deleteResourceJob);
+                    this.jobService.createJob(deleteResource);
                 }
         );
     }
