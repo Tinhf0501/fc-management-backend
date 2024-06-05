@@ -30,3 +30,7 @@ media:
 logging:
   ignores-path:
     - "/api/resources/**"
+job:
+  delete-resource:
+    active: true
+    time: 0/30 * * * * ?

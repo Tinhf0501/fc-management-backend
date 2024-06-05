@@ -33,7 +33,7 @@
         <addAutoIncrement tableName="${tableName}" columnName="JOB_ID" columnDataType="bigint"/>
     </changeSet>
 
-    <changeSet id="${tableName}-1" author="tinhnh">
+    <changeSet id="${tableName}-2" author="tinhnh">
         <comment>
             Tình quên add
         </comment>
