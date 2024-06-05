@@ -27,3 +27,7 @@ media:
     local:
       absolute-path: ""
       host: https://localhost:8080/api
+job:
+  delete-resource:
+    active: true
+    time: 0 0/10 * * * ?

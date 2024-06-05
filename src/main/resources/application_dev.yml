@@ -46,3 +46,7 @@ springdoc:
   swagger-ui:
     path: /swagger-ui.html # default http://localhost:8080/swagger-ui.html
     operations-sorter: method # sắp xếp api theo http method
+job:
+  delete-resource:
+    active: true
+    time: 0/30 * * * * ?

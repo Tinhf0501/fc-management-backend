@@ -29,4 +29,11 @@ public class JobEntity extends BaseEntity {
 
     @Column(name = "JOB_TYPE")
     private String jobType;
+
+    @Column(name = "TRACE_ID")
+    private String traceId;
+
+    @Column(name = "STATUS")
+    private String status;
+
 }
