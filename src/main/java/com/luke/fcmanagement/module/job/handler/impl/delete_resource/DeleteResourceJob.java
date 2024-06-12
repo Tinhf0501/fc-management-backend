@@ -8,8 +8,8 @@ import com.luke.fcmanagement.module.job.JobEntity;
 import com.luke.fcmanagement.module.job.constants.JobType;
 import com.luke.fcmanagement.module.job.handler.JobProcessor;
 import com.luke.fcmanagement.module.resource.file.IFileService;
-import com.luke.fcmanagement.utils.JSON;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -20,6 +20,7 @@ import java.util.List;
 @Component
 @ConditionalOnProperty(prefix = "job.delete-resource", value = "active", havingValue = "true")
 @RequiredArgsConstructor
+@Slf4j
 public class DeleteResourceJob extends JobProcessor {
     private final ObjectMapper mapper;
     private final IFileService fileService;
@@ -47,6 +48,8 @@ public class DeleteResourceJob extends JobProcessor {
     @Scheduled(cron = "${job.delete-resource.time}")
     @Override
     public void execute() {
+        log.info("[START] job delete resource");
         super.execute();
+        log.info("[END] job delete resource");
     }
 }
