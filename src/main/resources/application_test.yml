@@ -34,3 +34,6 @@ job:
   delete-resource:
     active: true
     time: 0/30 * * * * ?
+  clean-resource:
+    active: true
+    time: 0/30 * * * * ?
