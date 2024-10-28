@@ -1,0 +1,43 @@
+Change DB
+
+TB : Football club: thêm trường owner : là username của user sở hữu Fc này để khi login sẽ vào đúng fc luôn (đánh unique)
+
+TB : FC member: 
++) user_id đổi thành username
++) chuyển các cột date_of_birthday, phone_number, phone_number, phone_number vào bàng user
++) khi thêm member , mặc định thêm 1 user gắn vs member ý (trạng thái inactive, email có thể thay đổi - vì lúc mới tạo có thể nhập sai)
+sau khi login thành công k cho sửa email , user thành active
+
+
+TB: FUND_FC
++) amount change thành amount_per_mem
++) thêm trưởng fund_name: tên đợt quỹ
++) date_fund change to expire_date: ngày cuối cùng để đóng quỹ
+￼
+
++) create_date: coi như là ngày start_date
++) job 1: thông báo đóng quỹ (ngày bắt đầu 1 phát, ngày kết thúc 1 phát)
++) job2: quét những thằng quá hẹn mà k đóng (chạy lúc ngày hết hạn+1)
+
+TB FUND_FC_MEM :
++) Thêm trường payment_method
++) ref_id: id của th method
+
+TB match_fixture: 
++)thêm trg is_external: để phân biệt đá vs đội trong hệ thống và ngoài hệ thống
++)bỏ trg team_one, team_two
++) thêm trường : fc_external_name: tên của fc bên ngoài hệ thống
+
+TB Match_result: change name to Match_details
++) bỏ trg team_one, team_two
++) bỏ description
++) thêm : team_id
++) thêm is_external
++) thêm trường : fc_external_name: tên của fc bên ngoài hệ thống 
++) bỏ team_one_points, team_two_points
++) thêm point: điểm của từng fc
+
+TB Match_member_goal:
++) match_id rename to result_id
+
+sẽ xóa system_conig, job, his_log
