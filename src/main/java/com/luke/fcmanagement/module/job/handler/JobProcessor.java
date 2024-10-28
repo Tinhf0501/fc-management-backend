@@ -33,6 +33,7 @@ public abstract class JobProcessor {
 
     public void execute() {
         List<JobEntity> entityList = initDataJob();
+        log.info("List job records in Db size = {}",entityList.size());
         entityList.forEach(jobEntity -> {
             String traceId = UUID.randomUUID().toString();
             MDC.put(AppConstants.TRACE_ID_KEY, traceId);
